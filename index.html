@@ -723,19 +723,39 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
         } else if (!/^https:$/.test(location.protocol) && location.hostname !== 'localhost') {
             aviso('A instalação só funciona com a página alojada em https.');
         } else {
-            diagnosticar().then(function (falhas) {
-                if (falhas.length) aviso('Não encontro no servidor: ' + falhas.join(', ') + '. Publique estes ficheiros junto do index.html.');
+            diagnosticar().then(function (msg) {
+                if (msg) aviso(msg);
                 else if (/iphone|ipad|ipod/i.test(navigator.userAgent)) aviso('No iPhone, abra no Safari, toque em Partilhar e depois em «Adicionar ao ecrã principal».');
                 else aviso('Abra o menu do navegador (⋮) e escolha «Instalar aplicação» ou «Adicionar ao ecrã principal».');
             });
         }
     });
-    /* Confirma que os ficheiros da instalação existem no servidor */
+    /* Confirma o que está publicado: lê o manifest.json e testa os ícones que ele próprio indica */
     function diagnosticar() {
-        var lista = ['manifest.json', 'sw.js', 'icons/icon-192.png', 'icons/icon-512.png'], falhas = [];
-        return Promise.all(lista.map(function (u) {
-            return fetch(u, { cache: 'no-store' }).then(function (r) { if (!r.ok) falhas.push(u); }, function () { falhas.push(u); });
-        })).then(function () { return falhas; });
+        var link = document.querySelector('link[rel="manifest"]');
+        var mUrl = link ? link.href : new URL('manifest.json', location.href).href;
+        function abre(u) { return fetch(u, { cache: 'no-store' }).then(function (r) { return r.ok; }, function () { return false; }); }
+        return fetch(mUrl, { cache: 'no-store' }).then(function (r) {
+            if (!r.ok) return 'Não encontro o manifest.json no servidor.';
+            return r.json().then(function (m) {
+                var icons = (m && m.icons) || [], tem192 = false, tem512 = false;
+                icons.forEach(function (i) {
+                    String(i.sizes || '').split(' ').forEach(function (z) {
+                        var n = parseInt(z, 10) || 0;
+                        if (n >= 192) tem192 = true;
+                        if (n >= 512) tem512 = true;
+                    });
+                });
+                if (!tem192 || !tem512) return 'O manifest.json precisa de ícones de 192 e de 512 píxeis (campo «icons»).';
+                return Promise.all(icons.map(function (i) {
+                    return abre(new URL(i.src, mUrl).href).then(function (ok) { return ok ? null : i.src; });
+                })).then(function (l) {
+                    var falhas = l.filter(Boolean);
+                    if (falhas.length) return 'O manifest.json refere ícones que não abrem: ' + falhas.join(', ') + '.';
+                    return abre(new URL('sw.js', location.href).href).then(function (ok) { return ok ? null : 'Não encontro o sw.js no servidor.'; });
+                });
+            }, function () { return 'O manifest.json tem um erro de formato.'; });
+        }, function () { return 'Não consegui ler o manifest.json.'; });
     }
     $('m-sair').addEventListener('click', function () {
         fecharMenuApp();
