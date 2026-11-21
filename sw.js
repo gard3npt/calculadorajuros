@@ -1,10 +1,10 @@
 /* Service worker: permite instalar a app e abri-la sem rede.
    Quando alterar o index.html, mude o número da versão abaixo para os telemóveis atualizarem. */
-var VERSAO = 'calc-juros-v2';
+var VERSAO = 'calc-juros-v4';
 var FICHEIROS = [
     './', 'index.html', 'manifest.json',
-    'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png',
-    'icons/apple-touch-icon.png', 'icons/favicon-64.png'
+    'icon-192.png', 'icon-512.png', 'icon-maskable-512.png',
+    'apple-touch-icon.png', 'favicon-64.png'
 ];
 
 self.addEventListener('install', function (e) {
@@ -25,16 +25,16 @@ self.addEventListener('activate', function (e) {
 self.addEventListener('fetch', function (e) {
     var req = e.request;
     if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
-    if (req.mode === 'navigate') {
-        /* página: tenta a rede (versão mais recente) e, sem rede, usa a guardada */
-        e.respondWith(
-            fetch(req).then(function (r) {
+    /* rede primeiro (ficheiros sempre atualizados); sem rede, usa a cópia guardada */
+    e.respondWith(
+        fetch(req).then(function (r) {
+            if (r && r.ok) {
                 var copia = r.clone();
-                caches.open(VERSAO).then(function (c) { c.put('index.html', copia); });
-                return r;
-            }).catch(function () { return caches.match('index.html'); })
-        );
-        return;
-    }
-    e.respondWith(caches.match(req).then(function (r) { return r || fetch(req); }));
+                caches.open(VERSAO).then(function (c) { c.put(req.mode === 'navigate' ? 'index.html' : req, copia); });
+            }
+            return r;
+        }).catch(function () {
+            return caches.match(req).then(function (r) { return r || (req.mode === 'navigate' ? caches.match('index.html') : undefined); });
+        })
+    );
 });
