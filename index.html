@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1e40af">
+<title>Calculadora de Juros (Mobile)</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icons/favicon-64.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Calc. Juros">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<style>
+:root {
+    --azul: #1e40af; --azul-claro: #dbeafe; --verde: #047857; --verde-claro: #d1fae5;
+    --cor: var(--azul); --cor-clara: var(--azul-claro);
+    --texto: #0f172a; --suave: #64748b; --borda: #e2e8f0; --fundo: #f1f5f9;
+}
+body[data-tipo="compound"] { --cor: var(--verde); --cor-clara: var(--verde-claro); }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+    margin: 0; background: var(--fundo); color: var(--texto);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    padding: env(safe-area-inset-top) 0 calc(24px + env(safe-area-inset-bottom));
+}
+.app { max-width: 520px; margin: 0 auto; padding: 0 14px; }
+
+header { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 18px 4px 12px; }
+header h1 { margin: 0; font-size: 1.15rem; line-height: 1.15; font-weight: 800; letter-spacing: -.01em; }
+header p { margin: 2px 0 0; font-size: .8rem; color: var(--suave); }
+header .tit { flex: 1 1 auto; min-width: 0; }
+header h1 .mob { white-space: nowrap; color: var(--cor); }
+
+/* Escolha TANB / Juros compostos */
+.seg { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 6px; background: #e2e8f0; border-radius: 18px; }
+.seg button {
+    min-height: 58px; border: 0; border-radius: 13px; background: transparent; color: var(--suave);
+    font: inherit; font-size: 1.15rem; font-weight: 800; cursor: pointer; line-height: 1.15;
+}
+.seg button small { display: block; font-size: .72rem; font-weight: 600; opacity: .85; }
+.seg button[aria-checked="true"] { background: var(--cor); color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,.2); }
+
+.card { background: #fff; border-radius: 20px; padding: 16px; margin-top: 14px; box-shadow: 0 2px 10px rgba(15,23,42,.07); }
+
+/* Campos grandes */
+.campo label { display: block; margin: 0 0 4px 2px; font-size: .95rem; font-weight: 700; color: var(--suave); }
+.campo .caixa { position: relative; }
+.campo input {
+    width: 100%; height: 66px; padding: 0 52px 0 16px; border: 2px solid var(--borda); border-radius: 14px;
+    background: #f8fafc; color: var(--texto); font: inherit; font-size: 1.9rem; font-weight: 800;
+    font-variant-numeric: tabular-nums; outline: none;
+}
+.campo input:focus { border-color: var(--cor); background: #fff; box-shadow: 0 0 0 4px var(--cor-clara); }
+.campo input.erro { border-color: #dc2626; background: #fef2f2; }
+.campo .un { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 1.3rem; font-weight: 800; color: var(--suave); pointer-events: none; }
+.linhad { display: grid; grid-template-columns: 1.3fr 1fr; gap: 8px; align-items: stretch; }
+.datasbox { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.dt {
+    display: flex; align-items: center; gap: 4px; min-height: 44px; margin: 0; padding: 0 6px 0 10px;
+    border: 2px solid var(--borda); border-radius: 12px; background: #f8fafc;
+    font-size: .75rem; font-weight: 700; color: var(--suave);
+}
+.dt span { flex: 0 0 44px; }
+.dt input[type="date"] {
+    flex: 1 1 auto; min-width: 0; width: 100%; height: 38px; margin: 0; padding: 0; border: 0; background: transparent;
+    font: inherit; font-size: .95rem; font-weight: 800; color: var(--texto); outline: none;
+}
+.dt input[type="date"]::-webkit-calendar-picker-indicator { margin: 0; padding: 0 0 0 2px; width: 16px; }
+.dt:focus-within { border-color: var(--cor); background: #fff; box-shadow: 0 0 0 3px var(--cor-clara); }
+.dt.erro { border-color: #dc2626; background: #fef2f2; }
+.linhad .diasbox { min-height: 94px; }
+.linhad .diasbox input { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0 50px 0 8px; font-size: 1.7rem; text-align: right; }
+.linhad .diasbox .un { right: 10px; font-size: 1rem; }
+.linha2 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px; }
+.linha2 .campo { min-width: 0; }
+.linha2 .campo label { white-space: nowrap; font-size: .9rem; }
+.linha2 .campo input { height: 64px; padding: 0 30px 0 12px; font-size: 1.6rem; }
+.linha2 .campo .un { right: 10px; font-size: 1.1rem; }
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+.campo + .duo { margin-top: 12px; }
+
+.prazo { margin-top: 14px; }
+.prazo h2 { margin: 0 0 6px 2px; font-size: .95rem; font-weight: 700; color: var(--suave); }
+.prazos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.prazos button {
+    min-height: 62px; padding: 4px 2px; border: 2px solid var(--borda); border-radius: 14px; background: #f8fafc; color: var(--texto);
+    font: inherit; cursor: pointer; line-height: 1.1;
+}
+.prazos button b { display: block; font-size: 1.7rem; font-weight: 800; }
+.prazos button small { display: block; font-size: .78rem; font-weight: 700; opacity: .85; }
+.prazos button[aria-checked="true"] { border-color: var(--cor); background: var(--cor); color: #fff; }
+.det { margin-top: 14px; border-top: 1px dashed var(--borda); }
+.det summary {
+    display: flex; align-items: center; gap: 8px; min-height: 50px; cursor: pointer; list-style: none;
+    font-size: .95rem; font-weight: 700; color: var(--suave);
+}
+.det summary::-webkit-details-marker { display: none; }
+.det .sum-t { flex: 0 0 auto; }
+.det .sum-v { flex: 1 1 auto; text-align: right; font-weight: 800; color: var(--cor); font-size: 1rem; }
+.det .seta { flex: 0 0 auto; transition: transform .2s; }
+.det[open] .seta { transform: rotate(180deg); }
+.selrow { display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--borda); }
+.sel { position: relative; min-width: 0; }
+.dd {
+    position: relative; display: flex; flex-direction: column; justify-content: center; width: 100%; min-height: 62px;
+    margin: 0; padding: 6px 12px 6px 14px; border: 2px solid var(--borda); border-radius: 14px; background: #f8fafc;
+    font: inherit; text-align: left; cursor: pointer; color: var(--texto);
+}
+.dd .l { font-size: .78rem; font-weight: 700; color: var(--suave); line-height: 1.2; }
+.dd .vrow { display: flex; align-items: baseline; justify-content: space-between; gap: 6px; }
+.dd .v { font-size: 1.2rem; font-weight: 800; line-height: 1.25; white-space: nowrap; }
+.dd .p { font-size: 1.05rem; font-weight: 800; color: var(--cor); white-space: nowrap; }
+.dd .seta { position: absolute; right: 10px; top: 7px; font-size: .85rem; color: var(--suave); }
+.sel.aberto .dd { border-color: var(--cor); background: #fff; box-shadow: 0 0 0 4px var(--cor-clara); }
+.menu { display: none; position: absolute; top: calc(100% + 6px); left: 0; width: max-content; min-width: 100%; max-width: calc(100vw - 28px); z-index: 30; box-shadow: 0 12px 32px rgba(15,23,42,.3); }
+.sel.aberto .menu { display: block; }
+.sel + .sel .menu { left: auto; right: 0; }
+.lista { border: 2px solid var(--borda); border-radius: 14px; overflow: hidden; background: #fff; }
+.item {
+    display: flex; align-items: center; gap: 12px; width: 100%; min-height: 50px; margin: 0; padding: 0 14px;
+    border: 0; border-top: 1px solid var(--borda); background: #fff; color: var(--texto);
+    font: inherit; font-size: 1.05rem; font-weight: 700; text-align: left; cursor: pointer;
+}
+.item:first-child { border-top: 0; }
+.item::before {
+    content: ""; flex: 0 0 auto; width: 22px; height: 22px; border: 2px solid #cbd5e1; border-radius: 50%; background: #fff;
+}
+.item[aria-pressed="true"] { background: var(--cor-clara); color: var(--cor); }
+.item[aria-pressed="true"]::before { border-color: var(--cor); background: radial-gradient(circle, var(--cor) 0 45%, #fff 50%); }
+.item .dir { margin-left: auto; display: inline-flex; align-items: center; gap: 6px; font-weight: 800; color: var(--suave); }
+.item[aria-pressed="true"] .dir { color: var(--cor); }
+.item .dir input {
+    width: 76px; height: 38px; padding: 0 6px; border: 2px solid var(--borda); border-radius: 10px; text-align: center;
+    font: inherit; font-size: 1.05rem; font-weight: 800; color: var(--texto); background: #f8fafc; outline: none;
+}
+.item .dir input.erro { border-color: #dc2626; background: #fef2f2; }
+.item .dir input:focus { border-color: var(--cor); box-shadow: 0 0 0 3px var(--cor-clara); }
+.opcoes { margin-top: 16px; padding-top: 14px; border-top: 1px dashed var(--borda); }
+.opcoes h2 { margin: 0 0 8px; font-size: .95rem; font-weight: 700; color: var(--suave); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.chip {
+    min-height: 46px; padding: 0 16px; border: 2px solid var(--borda); border-radius: 999px; background: #fff;
+    font: inherit; font-size: 1rem; font-weight: 700; color: var(--texto); cursor: pointer;
+}
+.chip[aria-pressed="true"] { border-color: var(--cor); background: var(--cor-clara); color: var(--cor); }
+.ret-campo { display: inline-flex; align-items: center; gap: 6px; font-weight: 800; color: var(--suave); }
+.ret-campo input {
+    width: 84px; height: 46px; padding: 0 8px; border: 2px solid var(--borda); border-radius: 12px; text-align: center;
+    font: inherit; font-size: 1.15rem; font-weight: 800; color: var(--texto); background: #f8fafc; outline: none;
+}
+.ret-campo input:focus { border-color: var(--cor); box-shadow: 0 0 0 4px var(--cor-clara); }
+.so-tanb, .so-comp { display: none; }
+body[data-tipo="tanb"] .so-tanb, body[data-tipo="compound"] .so-comp { display: block; }
+
+.aviso { margin: 12px 2px 0; font-size: .95rem; font-weight: 600; color: #b91c1c; }
+.aviso[hidden] { display: none; }
+
+/* Resultados */
+.res { background: var(--cor); color: #fff; }
+.res .rotulo { font-size: .9rem; font-weight: 700; opacity: .9; }
+.hero { margin: 2px 0 0; font-size: clamp(2.3rem, 12vw, 3.2rem); font-weight: 800; line-height: 1.1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hero.sm { font-size: clamp(1.7rem, 9vw, 2.4rem); }
+.grelha { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 14px; }
+.bloco { background: rgba(255,255,255,.14); border-radius: 14px; padding: 10px 12px; min-width: 0; }
+.bloco.largo { grid-column: 1 / -1; background: #fff; color: var(--texto); }
+.bloco.largo .rotulo { color: var(--suave); opacity: 1; }
+.bloco .valor { margin-top: 2px; font-size: 1.55rem; font-weight: 800; line-height: 1.15; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bloco.largo .valor { font-size: 2rem; color: var(--cor); }
+.valor.sm { font-size: 1.15rem !important; }
+.vazio { opacity: .55; }
+
+.limpar {
+    flex: 0 0 auto; display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 48px; padding: 0 18px;
+    border: 0; border-radius: 999px; background: #dc2626; color: #fff; cursor: pointer;
+    font: inherit; font-size: 1.05rem; font-weight: 800; box-shadow: 0 4px 12px rgba(220,38,38,.35);
+}
+.limpar:active { background: #b91c1c; transform: scale(.97); }
+.nota { margin: 10px 4px 0; font-size: .7rem; line-height: 1.35; color: var(--suave); text-align: center; }
+/* Valores de exemplo discretos */
+input::placeholder { color: #d3dbe6; font-weight: 600; opacity: 1; }
+.dt input[type="date"]:not(.tem) { color: #d3dbe6; }
+
+/* Guia visual: indica onde começar / o que falta preencher */
+@keyframes pulsa {
+    0%, 100% { box-shadow: 0 0 0 0 var(--cor-clara); }
+    50%      { box-shadow: 0 0 0 7px var(--cor-clara); }
+}
+@keyframes salta { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+.campo.guia input, .prazos.guia button { border-color: var(--cor); background: var(--cor-clara); animation: pulsa 1.6s ease-in-out infinite; }
+.prazos.guia button[aria-checked="true"] { background: var(--cor); }
+.campo { position: relative; }
+.comece {
+    position: absolute; top: -1px; right: 0; display: none; padding: 2px 9px; border-radius: 999px;
+    background: var(--cor); color: #fff; font-size: .7rem; font-weight: 800; line-height: 1.5; pointer-events: none;
+}
+.comece i { display: inline-block; font-style: normal; animation: salta 1s ease-in-out infinite; }
+.comece.ver { display: block; }
+@media (prefers-reduced-motion: reduce) {
+    .campo.guia input, .prazos.guia button, .comece i { animation: none; }
+}
+.appmenu { position: relative; flex: 0 0 auto; }
+.burger {
+    display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; padding: 0;
+    border: 2px solid var(--borda); border-radius: 14px; background: #fff; color: var(--texto); cursor: pointer;
+}
+.burger[aria-expanded="true"] { border-color: var(--cor); background: var(--cor-clara); color: var(--cor); }
+.appmenu-lista {
+    position: absolute; top: calc(100% + 8px); right: 0; z-index: 50; width: 250px; padding: 6px;
+    background: #fff; border: 2px solid var(--borda); border-radius: 16px; box-shadow: 0 14px 34px rgba(15,23,42,.3);
+}
+.appmenu-lista[hidden] { display: none; }
+.am-item {
+    display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; margin: 0; padding: 0 12px;
+    border: 0; border-radius: 10px; background: transparent; color: var(--texto); text-align: left; cursor: pointer;
+    font: inherit; font-size: 1.05rem; font-weight: 700;
+}
+.am-item:active { background: var(--cor-clara); color: var(--cor); }
+.am-item svg { flex: 0 0 auto; color: var(--suave); }
+button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+</style>
+</head>
+<body data-tipo="tanb">
+<main class="app">
+    <header>
+        <div class="tit">
+            <h1>Calculadora de Juros <span class="mob">(Mobile)</span></h1>
+            <p>Depósitos a prazo</p>
+        </div>
+        <button type="button" class="limpar" id="limpar" aria-label="Limpar valores" title="Limpar valores">
+            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
+            <span>Limpar</span>
+        </button>
+        <div class="appmenu" id="appmenu">
+            <button type="button" class="burger" id="burger" aria-haspopup="true" aria-expanded="false" aria-controls="appmenu-lista" aria-label="Menu" title="Menu">
+                <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </button>
+            <nav class="appmenu-lista" id="appmenu-lista" aria-label="Menu da aplicação" hidden>
+                <!-- FUTURO: acrescentar aqui, como novos botões «am-item», Sobre, Contacto, «O que é TANB e juros compostos»
+                     e as ligações exigidas pelo AdSense (por exemplo Política de Privacidade e gestão de consentimento). -->
+                <button type="button" class="am-item" id="m-sair">
+                    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M16 8l4 4-4 4M20 12H9"/></svg>
+                    Sair da app
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="seg" role="radiogroup" aria-label="Tipo de juros">
+        <button type="button" role="radio" id="b-tanb" aria-checked="true">TANB<small>Juros simples</small></button>
+        <button type="button" role="radio" id="b-comp" aria-checked="false">Compostos<small>Juros sobre juros</small></button>
+    </div>
+
+    <section class="card" aria-label="Dados da simulação">
+        <div class="linha2">
+        <div class="campo">
+            <label for="montante">Montante</label>
+            <span class="comece" id="comece" aria-hidden="true">Comece aqui <i>↓</i></span>
+            <div class="caixa">
+                <input id="montante" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next" placeholder="10 000">
+                <span class="un">€</span>
+            </div>
+        </div>
+        <div class="campo">
+            <label for="taxa">Taxa anual</label>
+            <div class="caixa">
+                <input id="taxa" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" placeholder="2,5">
+                <span class="un">%</span>
+            </div>
+        </div>
+        </div>
+        <div class="prazo">
+            <h2 id="lbl-prazo">Prazo</h2>
+            <div class="prazos" role="radiogroup" aria-labelledby="lbl-prazo">
+                <button type="button" role="radio" data-dias="30" aria-label="1 mês" aria-checked="false"><b>1</b><small>mês</small></button>
+                <button type="button" role="radio" data-dias="90" aria-label="3 meses" aria-checked="false"><b>3</b><small>meses</small></button>
+                <button type="button" role="radio" data-dias="180" aria-label="6 meses" aria-checked="false"><b>6</b><small>meses</small></button>
+                <button type="button" role="radio" data-dias="365" aria-label="1 ano" aria-checked="true"><b>1</b><small>ano</small></button>
+            </div>
+            <div class="campo" style="margin-top:10px">
+                <label for="d-ini">Datas e dias a aplicar (pode editar)</label>
+                <div class="linhad">
+                    <div class="datasbox">
+                        <label class="dt"><span>Início</span><input id="d-ini" type="date" aria-label="Data de início"></label>
+                        <label class="dt"><span>Fim</span><input id="d-fim" type="date" aria-label="Data de fim"></label>
+                    </div>
+                    <div class="caixa diasbox">
+                        <input id="dias" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="done" placeholder="365" aria-label="Número de dias">
+                        <span class="un">dias</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p class="aviso" id="aviso" role="status" aria-live="polite" hidden></p>
+
+        <div class="selrow">
+            <div class="sel" id="sel-ret">
+                <button type="button" class="dd" aria-haspopup="true" aria-expanded="false"><span class="l">Retenção</span><span class="vrow"><span class="v" id="v-ret">Continente</span><span class="p" id="p-ret">28 %</span></span><span class="seta" aria-hidden="true">▾</span></button>
+                <div class="menu lista" role="group" aria-label="Retenção na fonte">
+                    <button type="button" class="item" id="r-cont" aria-pressed="true">Continente<span class="dir">28 %</span></button>
+                    <button type="button" class="item" id="r-ilhas" aria-pressed="false">Ilhas<span class="dir">19,6 %</span></button>
+                    <label class="item" id="r-outra" aria-pressed="false" for="ret">Outra<span class="dir"><input id="ret" type="text" inputmode="decimal" autocomplete="off" aria-label="Taxa de retenção em percentagem" placeholder="—"> %</span></label>
+                </div>
+            </div>
+            <div class="sel so-tanb" id="sel-base">
+                <button type="button" class="dd" aria-haspopup="true" aria-expanded="false"><span class="l">Base</span><span class="v" id="v-base">360 dias</span><span class="seta" aria-hidden="true">▾</span></button>
+                <div class="menu lista" role="group" aria-label="Base de cálculo">
+                    <button type="button" class="item" data-base="360" aria-pressed="true">360 dias</button>
+                    <button type="button" class="item" data-base="365" aria-pressed="false">365 dias</button>
+                </div>
+            </div>
+            <div class="sel so-comp" id="sel-cap">
+                <button type="button" class="dd" aria-haspopup="true" aria-expanded="false"><span class="l">Capitalização</span><span class="v" id="v-cap">Diária</span><span class="seta" aria-hidden="true">▾</span></button>
+                <div class="menu lista" role="group" aria-label="Capitalização">
+                    <button type="button" class="item" data-cap="diaria" aria-pressed="true">Diária</button>
+                    <button type="button" class="item" data-cap="mensal" aria-pressed="false">Mensal</button>
+                    <button type="button" class="item" data-cap="anual" aria-pressed="false">Anual</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="card res" aria-label="Resultados" aria-live="polite">
+        <div class="rotulo">Montante final</div>
+        <div class="hero vazio" id="o-final">—</div>
+        <div class="grelha">
+            <div class="bloco largo">
+                <div class="rotulo">Juros líquidos</div>
+                <div class="valor vazio" id="o-liq">—</div>
+            </div>
+            <div class="bloco">
+                <div class="rotulo">Taxa líq. anual efetiva</div>
+                <div class="valor vazio" id="o-taxa">—</div>
+            </div>
+            <div class="bloco">
+                <div class="rotulo">Líquido por dia</div>
+                <div class="valor vazio" id="o-dia">—</div>
+            </div>
+            <div class="bloco">
+                <div class="rotulo">Juros brutos</div>
+                <div class="valor vazio" id="o-brutos">—</div>
+            </div>
+            <div class="bloco">
+                <div class="rotulo">Retenção</div>
+                <div class="valor vazio" id="o-ret">—</div>
+            </div>
+        </div>
+    </section>
+
+    <p class="nota">Valores indicativos. Não substituem a informação do banco.</p>
+</main>
+
+<script>
+(function () {
+    'use strict';
+    var MAX_DIAS = 36500, MAX_TAXA = 100, MAX_MONTANTE = 1e12;
+    var RET_CONT = 28, RET_ILHAS = 19.6;
+    var PERIODOS = { diaria: 365, mensal: 12, anual: 1 };
+    var CHAVE = 'simulador_mobile_v1';
+
+    var st = { tipo: 'tanb', ret: RET_CONT, base: 360, cap: 'diaria', preset: null, outra: false, reg: RET_CONT };
+    var PRAZOS = [30, 90, 180, 365];
+    var erroDatas = '', modoDatas = false;
+    var URL_INICIO = 'https://gard3npt.github.io/'; /* para onde «Sair da app» vai quando o navegador não deixa fechar a janela */
+    var $ = function (id) { return document.getElementById(id); };
+
+    function parsePt(val, pct) {
+        if (!val) return 0;
+        var c = String(val).replace(/[€%\s\u00a0\u202f]/g, '');
+        if (c.indexOf('.') > -1 && c.indexOf(',') > -1) c = c.replace(/\./g, '').replace(',', '.');
+        else if (c.indexOf(',') > -1) c = c.replace(',', '.');
+        else if (!pct && /^\d{1,3}(\.\d{3})+$/.test(c)) c = c.replace(/\./g, '');
+        return parseFloat(c) || 0;
+    }
+    function fmt(n, d) {
+        return n.toLocaleString('pt-PT', { minimumFractionDigits: d, maximumFractionDigits: d });
+    }
+    function pctTxt(n) { return String(n).replace('.', ','); }
+
+    /* Mesma fórmula do simulador principal */
+    function calcular(montante, tanb, dias, composto) {
+        if (!(montante > 0 && tanb > 0 && dias > 0)) return null;
+        var ret = st.ret / 100, brutos, liquidos;
+        if (composto) {
+            var m = PERIODOS[st.cap];
+            var periodos = dias * m / 365;
+            var finalBruto = montante * Math.pow(1 + (tanb / 100 / m) * (1 - ret), periodos);
+            liquidos = finalBruto - montante;
+            brutos = liquidos / (1 - ret);
+        } else {
+            brutos = montante * (tanb / 100) * (dias / st.base);
+            liquidos = brutos * (1 - ret);
+        }
+        var final = montante + liquidos;
+        var r = {
+            brutos: brutos, retencao: brutos - liquidos, liquidos: liquidos,
+            ganhoDia: liquidos / dias, final: final,
+            taxaAnual: (Math.pow(final / montante, 365 / dias) - 1) * 100
+        };
+        for (var k in r) if (!isFinite(r[k])) return null;
+        return r;
+    }
+
+    function mostrar(id, txt, grande) {
+        var el = $(id);
+        el.textContent = txt;
+        el.classList.toggle('vazio', txt === '—');
+        el.classList.toggle('sm', txt.length > (grande ? 14 : 11));
+    }
+
+    function guardar() { /* nada fica guardado entre sessões: cada abertura começa limpa */ }
+
+    function atualizar() {
+        var m = parsePt($('montante').value), t = parsePt($('taxa').value, true), d = parseInt($('dias').value, 10) || 0;
+        var msgs = [];
+        function regra(id, n, max, nome) {
+            var txt = $(id).value.trim(), erro = false;
+            if (txt !== '' && (!/\d/.test(txt) || n < 0)) { erro = true; msgs.push(nome + ' inválido.'); }
+            else if (n > max) { erro = true; msgs.push(nome + ' acima do máximo (' + fmt(max, 0) + ').'); }
+            $(id).classList.toggle('erro', erro);
+            $(id).setAttribute('aria-invalid', erro ? 'true' : 'false');
+        }
+        regra('montante', m, MAX_MONTANTE, 'Montante');
+        regra('taxa', t, MAX_TAXA, 'Taxa');
+        regra('dias', d, MAX_DIAS, 'Dias');
+        if (erroDatas) msgs.push(erroDatas);
+        var av = $('aviso');
+        av.hidden = msgs.length === 0;
+        av.textContent = msgs.join(' ');
+
+        var r = msgs.length ? null : calcular(m, t, d, st.tipo === 'compound');
+        if (!r) {
+            ['final', 'liq', 'taxa', 'dia', 'brutos', 'ret'].forEach(function (k) { mostrar('o-' + k, '—'); });
+        } else {
+            mostrar('o-final', fmt(r.final, 2) + ' €', true);
+            mostrar('o-liq', fmt(r.liquidos, 2) + ' €', true);
+            mostrar('o-taxa', fmt(r.taxaAnual, 2) + ' %');
+            mostrar('o-dia', fmt(r.ganhoDia, 2) + ' €');
+            mostrar('o-brutos', fmt(r.brutos, 2) + ' €');
+            mostrar('o-ret', fmt(r.retencao, 2) + ' €');
+        }
+        atualizarGuia(m, t, d);
+        marcarVazios();
+        guardar();
+    }
+
+    function sincronizar() {
+        document.body.setAttribute('data-tipo', st.tipo);
+        $('b-tanb').setAttribute('aria-checked', st.tipo === 'tanb');
+        $('b-comp').setAttribute('aria-checked', st.tipo === 'compound');
+        $('r-cont').setAttribute('aria-pressed', !st.outra && st.ret === RET_CONT);
+        $('r-ilhas').setAttribute('aria-pressed', !st.outra && st.ret === RET_ILHAS);
+        $('r-outra').setAttribute('aria-pressed', st.outra);
+        if (!st.outra && document.activeElement !== $('ret')) { $('ret').value = ''; $('ret').classList.remove('erro'); }
+        document.querySelectorAll('[data-dias]').forEach(function (b) { b.setAttribute('aria-checked', Number(b.dataset.dias) === st.preset); });
+        document.querySelectorAll('[data-base]').forEach(function (b) { b.setAttribute('aria-pressed', Number(b.dataset.base) === st.base); });
+        document.querySelectorAll('[data-cap]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.cap === st.cap); });
+        $('p-ret').textContent = pctTxt(st.ret) + ' %';
+        $('v-ret').textContent = st.outra ? 'Outra' : st.ret === RET_CONT ? 'Continente' : 'Ilhas';
+        $('v-base').textContent = st.base + ' dias';
+        $('v-cap').textContent = { diaria: 'Diária', mensal: 'Mensal', anual: 'Anual' }[st.cap];
+        var tc = document.querySelector('meta[name="theme-color"]');
+        if (tc) tc.setAttribute('content', st.tipo === 'compound' ? '#047857' : '#1e40af');
+    }
+
+    /* Campos só com números */
+    function limpaDecimal(e) { e.target.value = e.target.value.replace(/[^\d.,\s]/g, ''); atualizar(); }
+    $('montante').addEventListener('input', limpaDecimal);
+    $('taxa').addEventListener('input', limpaDecimal);
+    $('montante').addEventListener('blur', function (e) {
+        var n = parsePt(e.target.value);
+        if (n > 0 && n <= MAX_MONTANTE) e.target.value = n.toLocaleString('pt-PT', { maximumFractionDigits: 2 });
+        atualizar();
+    });
+    $('dias').addEventListener('input', function (e) {
+        e.target.value = e.target.value.replace(/\D/g, '');
+        modoDatas = false; st.preset = null; garantirIni(); dias2fim(); sincronizar(); atualizar();
+    });
+    ['montante', 'taxa', 'dias'].forEach(function (id) {
+        $(id).addEventListener('focus', function (e) { var el = e.target; setTimeout(function () { try { el.select(); } catch (x) {} }, 0); });
+    });
+
+    $('b-tanb').addEventListener('click', function () { st.tipo = 'tanb'; sincronizar(); atualizar(); });
+    $('b-comp').addEventListener('click', function () { st.tipo = 'compound'; sincronizar(); atualizar(); });
+    $('r-cont').addEventListener('click', function () { st.ret = st.reg = RET_CONT; st.outra = false; sincronizar(); atualizar(); });
+    $('r-ilhas').addEventListener('click', function () { st.ret = st.reg = RET_ILHAS; st.outra = false; sincronizar(); atualizar(); });
+    /* «Outra»: o campo começa vazio e só fica selecionada quando é escrito um valor (só números) */
+    $('ret').addEventListener('focus', function (e) {
+        var el = e.target;
+        setTimeout(function () { try { el.select(); } catch (x) {} }, 0);
+    });
+    $('ret').addEventListener('input', function (e) {
+        var el = e.target, txt;
+        el.value = el.value.replace(/[^\d.,]/g, '');
+        txt = el.value.trim();
+        if (txt === '') {
+            st.outra = false; st.ret = st.reg; el.classList.remove('erro');
+        } else {
+            var r = parsePt(txt, true);
+            if (/\d/.test(txt) && r >= 0 && r <= 99.9) { st.outra = true; st.ret = r; el.classList.remove('erro'); }
+            else { el.classList.add('erro'); return; }
+        }
+        sincronizar(); atualizar();
+    });
+    $('ret').addEventListener('change', function (e) {
+        if (st.outra) e.target.value = pctTxt(st.ret);
+        else if (e.target.value.trim() !== '') e.target.value = '';
+        e.target.classList.remove('erro');
+        sincronizar();
+    });
+    document.querySelectorAll('[data-dias]').forEach(function (b) {
+        b.addEventListener('click', function () {
+            var n = Number(b.dataset.dias);
+            if (PRAZOS.indexOf(n) < 0) n = 365;
+            st.preset = n; $('dias').value = String(n); modoDatas = false; garantirIni(); dias2fim(); sincronizar(); atualizar();
+        });
+    });
+    document.querySelectorAll('[data-base]').forEach(function (b) {
+        b.addEventListener('click', function () { st.base = Number(b.dataset.base) === 365 ? 365 : 360; sincronizar(); atualizar(); });
+    });
+    document.querySelectorAll('[data-cap]').forEach(function (b) {
+        b.addEventListener('click', function () { st.cap = PERIODOS[b.dataset.cap] ? b.dataset.cap : 'diaria'; sincronizar(); atualizar(); });
+    });
+    /* Seletores: a lista abre por cima do conteúdo e fecha ao escolher */
+    function fecharMenus() {
+        document.querySelectorAll('.sel.aberto').forEach(function (x) {
+            x.classList.remove('aberto');
+            var t = x.querySelector('.dd, .cal-btn'); if (t) t.setAttribute('aria-expanded', 'false');
+        });
+    }
+    document.querySelectorAll('.dd, .cal-btn').forEach(function (b) {
+        b.addEventListener('click', function (e) {
+            e.stopPropagation();
+            var sel = b.parentNode, abrir = !sel.classList.contains('aberto');
+            fecharMenus(); fecharMenuApp();
+            if (abrir) { sel.classList.add('aberto'); b.setAttribute('aria-expanded', 'true'); }
+        });
+    });
+    document.querySelectorAll('.menu button.item').forEach(function (b) { b.addEventListener('click', fecharMenus); });
+    $('ret').addEventListener('change', fecharMenus);
+    $('ret').addEventListener('keydown', function (e) { if (e.key === 'Enter') e.target.blur(); });
+    document.addEventListener('click', function (e) { if (!e.target.closest('.sel')) fecharMenus(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fecharMenus(); });
+    /* Datas de início e de fim ligadas aos dias, nos dois sentidos */
+    function dataLocal(d) {
+        function z(n) { return (n < 10 ? '0' : '') + n; }
+        return d.getFullYear() + '-' + z(d.getMonth() + 1) + '-' + z(d.getDate());
+    }
+    function utc(txt) {
+        var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(txt || '');
+        return m ? Date.UTC(+m[1], +m[2] - 1, +m[3]) : NaN;
+    }
+    function somarDias(iso, n) {
+        var t = utc(iso), d;
+        function z(x) { return (x < 10 ? '0' : '') + x; }
+        if (isNaN(t)) return '';
+        d = new Date(t + n * 86400000);
+        return d.getUTCFullYear() + '-' + z(d.getUTCMonth() + 1) + '-' + z(d.getUTCDate());
+    }
+    function garantirIni() { if (!$('d-ini').value) $('d-ini').value = dataLocal(new Date()); }
+    function marcarVazios() {
+        ['d-ini', 'd-fim'].forEach(function (id) { $(id).classList.toggle('tem', !!$(id).value); });
+    }
+    function atualizarGuia(m, t, d) {
+        var alvo = !(m > 0) ? 'montante' : !(t > 0) ? 'taxa' : !(d > 0) ? 'prazo' : null;
+        $('montante').closest('.campo').classList.toggle('guia', alvo === 'montante');
+        $('taxa').closest('.campo').classList.toggle('guia', alvo === 'taxa');
+        document.querySelector('.prazos').classList.toggle('guia', alvo === 'prazo');
+        $('comece').classList.toggle('ver', alvo === 'montante' && document.activeElement !== $('montante'));
+    }
+    function marcarErroDatas() { $('d-fim').parentNode.classList.toggle('erro', !!erroDatas); }
+    /* dias → data de fim */
+    function dias2fim() {
+        var n = parseInt($('dias').value, 10);
+        erroDatas = '';
+        $('d-fim').value = (n >= 1 && n <= MAX_DIAS) ? somarDias($('d-ini').value, n) : '';
+        $('d-fim').min = $('d-ini').value || '';
+        marcarErroDatas();
+    }
+    /* datas → dias */
+    function datas2dias() {
+        var ini = utc($('d-ini').value), fim = utc($('d-fim').value), n;
+        $('d-fim').min = $('d-ini').value || '';
+        erroDatas = '';
+        if (!isNaN(ini) && !isNaN(fim)) {
+            n = Math.round((fim - ini) / 86400000);
+            if (n < 1) erroDatas = 'A data de fim tem de ser depois da data de início.';
+            else if (n > MAX_DIAS) erroDatas = 'O intervalo ultrapassa ' + fmt(MAX_DIAS, 0) + ' dias.';
+            else $('dias').value = String(n);
+        }
+        marcarErroDatas();
+    }
+    function aoMudarIni() {
+        if (modoDatas && !isNaN(utc($('d-fim').value))) { st.preset = null; datas2dias(); }
+        else dias2fim();
+        sincronizar(); atualizar();
+    }
+    function aoMudarFim() {
+        modoDatas = true; st.preset = null; garantirIni(); datas2dias();
+        sincronizar(); atualizar();
+    }
+    ['input', 'change'].forEach(function (ev) {
+        $('d-ini').addEventListener(ev, aoMudarIni);
+        $('d-fim').addEventListener(ev, aoMudarFim);
+    });
+    $('montante').addEventListener('focus', function () { atualizar(); });
+    $('montante').addEventListener('blur', function () { atualizar(); });
+    /* Menu de três linhas */
+    function fecharMenuApp() {
+        $('appmenu-lista').hidden = true;
+        $('burger').setAttribute('aria-expanded', 'false');
+    }
+    $('burger').addEventListener('click', function (e) {
+        e.stopPropagation();
+        var abrir = $('appmenu-lista').hidden;
+        fecharMenus();
+        if (abrir) { $('appmenu-lista').hidden = false; this.setAttribute('aria-expanded', 'true'); }
+        else fecharMenuApp();
+    });
+    document.addEventListener('click', function (e) { if (!e.target.closest('.appmenu')) fecharMenuApp(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fecharMenuApp(); });
+    $('m-sair').addEventListener('click', function () {
+        fecharMenuApp();
+        try { window.close(); } catch (x) { /* ignora */ }
+        setTimeout(function () { window.location.href = URL_INICIO; }, 250);
+    });
+    $('limpar').addEventListener('click', function () {
+        $('montante').value = ''; $('taxa').value = ''; $('dias').value = '';
+        $('d-ini').value = ''; $('d-fim').value = ''; $('ret').blur();
+        st.preset = null; modoDatas = false; erroDatas = '';
+        marcarErroDatas(); sincronizar(); atualizar();
+        if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
+    });
+
+    dias2fim();
+    sincronizar();
+    atualizar();
+    /* PWA: permite instalar no telemóvel e abrir sem rede (só funciona em https) */
+    if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+        window.addEventListener('load', function () {
+            navigator.serviceWorker.register('sw.js').catch(function () { /* ignora */ });
+        });
+    }
+})();
+</script>
+</body>
+</html>
