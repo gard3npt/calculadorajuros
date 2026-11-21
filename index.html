@@ -56,33 +56,36 @@ header h1 .mob { white-space: nowrap; color: var(--cor); }
 .campo input:focus { border-color: var(--cor); background: #fff; box-shadow: 0 0 0 4px var(--cor-clara); }
 .campo input.erro { border-color: #dc2626; background: #fef2f2; }
 .campo .un { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 1.3rem; font-weight: 800; color: var(--suave); pointer-events: none; }
-.linhad { display: grid; grid-template-columns: 1.3fr 1fr; gap: 8px; align-items: stretch; }
-.datasbox { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .dt {
-    display: flex; align-items: center; gap: 4px; min-height: 44px; margin: 0; padding: 0 6px 0 10px;
+    display: flex; flex-direction: column; justify-content: center; gap: 0; min-width: 0; min-height: 54px; margin: 0; padding: 4px 8px 4px 12px;
     border: 2px solid var(--borda); border-radius: 12px; background: #f8fafc;
-    font-size: .75rem; font-weight: 700; color: var(--suave);
+    font-size: .72rem; font-weight: 700; color: var(--suave); line-height: 1.2; text-align: center;
 }
-.dt span { flex: 0 0 44px; }
+.dt span { flex: 0 0 auto; }
 .dt input[type="date"] {
-    flex: 1 1 auto; min-width: 0; width: 100%; height: 38px; margin: 0; padding: 0; border: 0; background: transparent;
-    font: inherit; font-size: .95rem; font-weight: 800; color: var(--texto); outline: none;
+    flex: 0 0 auto; min-width: 0; width: 100%; height: 28px; margin: 0; padding: 0; border: 0; background: transparent;
+    font: inherit; font-size: .95rem; font-weight: 800; color: var(--texto); outline: none; text-align: center;
 }
+.dt input[type="date"]::-webkit-date-and-time-value { text-align: center; }
 .dt input[type="date"]::-webkit-calendar-picker-indicator { margin: 0; padding: 0 0 0 2px; width: 16px; }
 .dt:focus-within { border-color: var(--cor); background: #fff; box-shadow: 0 0 0 3px var(--cor-clara); }
 .dt.erro { border-color: #dc2626; background: #fef2f2; }
-.linhad .diasbox { min-height: 94px; }
-.linhad .diasbox input { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0 50px 0 8px; font-size: 1.7rem; text-align: right; }
-.linhad .diasbox .un { right: 10px; font-size: 1rem; }
-.linha2 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px; }
+.linha2 { display: grid; grid-template-columns: 1.7fr 1fr 1fr; gap: 8px; }
 .linha2 .campo { min-width: 0; }
-.linha2 .campo label { white-space: nowrap; font-size: .9rem; }
-.linha2 .campo input { height: 64px; padding: 0 30px 0 12px; font-size: 1.6rem; }
-.linha2 .campo .un { right: 10px; font-size: 1.1rem; }
+.linha2 .campo label { white-space: nowrap; font-size: .8rem; margin-left: 0; }
+.linha2 .campo input { height: 60px; padding: 0 16px; font-size: 1.15rem; border-radius: 12px; text-align: center; }
+.linha2 .campo .un { right: 5px; font-size: .8rem; }
+.linha2 .campo.dias input { padding: 0 6px; }
+.linha2 .campo.dias .un { display: none; }
+.linha2 .campo.usado input { border-color: var(--cor); background: var(--cor-clara); color: var(--cor); }
+.datas.usado .dt { border-color: var(--cor); background: var(--cor-clara); }
+.datas.usado .dt span, .datas.usado .dt input[type="date"] { color: var(--cor); }
+.datas { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
 .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
 .campo + .duo { margin-top: 12px; }
 
-.prazo { margin-top: 14px; }
+.prazo { position: relative; margin-top: 14px; }
+.prazo .comece { top: -2px; right: 0; }
 .prazo h2 { margin: 0 0 6px 2px; font-size: .95rem; font-weight: 700; color: var(--suave); }
 .prazos { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
 .prazos button {
@@ -91,7 +94,7 @@ header h1 .mob { white-space: nowrap; color: var(--cor); }
 }
 .prazos button b { display: block; font-size: 1.7rem; font-weight: 800; }
 .prazos button small { display: block; font-size: .78rem; font-weight: 700; opacity: .85; }
-.prazos button[aria-checked="true"] { border-color: var(--cor); background: var(--cor); color: #fff; }
+.prazos button[aria-checked="true"] { border-color: var(--cor); background: var(--cor-clara); color: var(--cor); }
 .det { margin-top: 14px; border-top: 1px dashed var(--borda); }
 .det summary {
     display: flex; align-items: center; gap: 8px; min-height: 50px; cursor: pointer; list-style: none;
@@ -190,10 +193,10 @@ input::placeholder { color: #d3dbe6; font-weight: 600; opacity: 1; }
 }
 @keyframes salta { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
 .campo.guia input, .prazos.guia button { border-color: var(--cor); background: var(--cor-clara); animation: pulsa 1.6s ease-in-out infinite; }
-.prazos.guia button[aria-checked="true"] { background: var(--cor); }
+.prazos.guia button[aria-checked="true"] { background: var(--cor-clara); }
 .campo { position: relative; }
 .comece {
-    position: absolute; top: -1px; right: 0; display: none; padding: 2px 9px; border-radius: 999px;
+    position: absolute; top: 13px; right: 6px; z-index: 2; display: none; padding: 2px 9px; border-radius: 999px;
     background: var(--cor); color: #fff; font-size: .7rem; font-weight: 800; line-height: 1.5; pointer-events: none;
 }
 .comece i { display: inline-block; font-style: normal; animation: salta 1s ease-in-out infinite; }
@@ -218,6 +221,13 @@ input::placeholder { color: #d3dbe6; font-weight: 600; opacity: 1; }
     font: inherit; font-size: 1.05rem; font-weight: 700;
 }
 .am-item:active { background: var(--cor-clara); color: var(--cor); }
+.am-item[hidden] { display: none; }
+.toast {
+    position: fixed; left: 14px; right: 14px; bottom: calc(16px + env(safe-area-inset-bottom)); max-width: 492px; margin: 0 auto; z-index: 60;
+    padding: 14px 16px; border-radius: 14px; background: #0f172a; color: #fff; font-size: .95rem; font-weight: 700; line-height: 1.35;
+    box-shadow: 0 10px 28px rgba(15,23,42,.4);
+}
+.toast[hidden] { display: none; }
 .am-item svg { flex: 0 0 auto; color: var(--suave); }
 button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
 </style>
@@ -240,6 +250,10 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
             <nav class="appmenu-lista" id="appmenu-lista" aria-label="Menu da aplicação" hidden>
                 <!-- FUTURO: acrescentar aqui, como novos botões «am-item», Sobre, Contacto, «O que é TANB e juros compostos»
                      e as ligações exigidas pelo AdSense (por exemplo Política de Privacidade e gestão de consentimento). -->
+                <button type="button" class="am-item" id="m-instalar">
+                    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M5 20h14"/></svg>
+                    Instalar app
+                </button>
                 <button type="button" class="am-item" id="m-sair">
                     <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M16 8l4 4-4 4M20 12H9"/></svg>
                     Sair da app
@@ -259,38 +273,33 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
             <label for="montante">Montante</label>
             <span class="comece" id="comece" aria-hidden="true">Comece aqui <i>↓</i></span>
             <div class="caixa">
-                <input id="montante" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next" placeholder="10 000">
+                <input id="montante" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next" placeholder="10 000,00">
                 <span class="un">€</span>
             </div>
         </div>
         <div class="campo">
             <label for="taxa">Taxa anual</label>
+            <span class="comece" id="comece-taxa" aria-hidden="true">Agora <i>↓</i></span>
             <div class="caixa">
-                <input id="taxa" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" placeholder="2,5">
+                <input id="taxa" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next" placeholder="2,5">
                 <span class="un">%</span>
+            </div>
+        </div>
+        <div class="campo dias">
+            <label for="dias">Dias</label>
+            <div class="caixa">
+                <input id="dias" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="done" placeholder="365" aria-label="Número de dias">
+                <span class="un">dias</span>
             </div>
         </div>
         </div>
         <div class="prazo">
+            <span class="comece" id="comece-prazo" aria-hidden="true">Escolha o prazo <i>↓</i></span>
             <h2 id="lbl-prazo">Prazo</h2>
-            <div class="prazos" role="radiogroup" aria-labelledby="lbl-prazo">
-                <button type="button" role="radio" data-dias="30" aria-label="1 mês" aria-checked="false"><b>1</b><small>mês</small></button>
-                <button type="button" role="radio" data-dias="90" aria-label="3 meses" aria-checked="false"><b>3</b><small>meses</small></button>
-                <button type="button" role="radio" data-dias="180" aria-label="6 meses" aria-checked="false"><b>6</b><small>meses</small></button>
-                <button type="button" role="radio" data-dias="365" aria-label="1 ano" aria-checked="true"><b>1</b><small>ano</small></button>
-            </div>
-            <div class="campo" style="margin-top:10px">
-                <label for="d-ini">Datas e dias a aplicar (pode editar)</label>
-                <div class="linhad">
-                    <div class="datasbox">
-                        <label class="dt"><span>Início</span><input id="d-ini" type="date" aria-label="Data de início"></label>
-                        <label class="dt"><span>Fim</span><input id="d-fim" type="date" aria-label="Data de fim"></label>
-                    </div>
-                    <div class="caixa diasbox">
-                        <input id="dias" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="done" placeholder="365" aria-label="Número de dias">
-                        <span class="un">dias</span>
-                    </div>
-                </div>
+            <div class="prazos" id="prazos" role="radiogroup" aria-labelledby="lbl-prazo"></div>
+            <div class="datas">
+                <label class="dt"><span>Início</span><input id="d-ini" type="date" aria-label="Data de início"></label>
+                <label class="dt"><span>Fim</span><input id="d-fim" type="date" aria-label="Data de fim"></label>
             </div>
         </div>
         <p class="aviso" id="aviso" role="status" aria-live="polite" hidden></p>
@@ -349,6 +358,7 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
         </div>
     </section>
 
+    <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
     <p class="nota">Valores indicativos. Não substituem a informação do banco.</p>
 </main>
 
@@ -361,8 +371,20 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
     var CHAVE = 'simulador_mobile_v1';
 
     var st = { tipo: 'tanb', ret: RET_CONT, base: 360, cap: 'diaria', preset: null, outra: false, reg: RET_CONT };
-    var PRAZOS = [30, 90, 180, 365];
-    var erroDatas = '', modoDatas = false;
+    /* Prazos rápidos (iguais em TANB e Compostos): [dias, número, unidade, texto para leitores de ecrã] */
+    var PRAZOS_LISTA = [[30, '1', 'mês', '1 mês'], [90, '3', 'meses', '3 meses'], [180, '6', 'meses', '6 meses'], [365, '1', 'ano', '1 ano']];
+    function desenharPrazos() {
+        var box = $('prazos');
+        if (box.children.length) return;
+        PRAZOS_LISTA.forEach(function (p) {
+            var b = document.createElement('button');
+            b.type = 'button'; b.setAttribute('role', 'radio'); b.setAttribute('aria-checked', 'false');
+            b.setAttribute('aria-label', p[3]); b.dataset.dias = String(p[0]);
+            b.innerHTML = '<b>' + p[1] + '</b><small>' + p[2] + '</small>';
+            box.appendChild(b);
+        });
+    }
+    var erroDatas = '', modoDatas = false, origem = null; /* origem do prazo: 'preset' | 'dias' | 'datas' */
     var URL_INICIO = 'https://gard3npt.github.io/'; /* para onde «Sair da app» vai quando o navegador não deixa fechar a janela */
     var $ = function (id) { return document.getElementById(id); };
 
@@ -425,6 +447,10 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
         regra('montante', m, MAX_MONTANTE, 'Montante');
         regra('taxa', t, MAX_TAXA, 'Taxa');
         regra('dias', d, MAX_DIAS, 'Dias');
+        ['montante', 'taxa'].forEach(function (id) {
+            var el = $(id);
+            el.closest('.campo').classList.toggle('usado', el.value.trim() !== '' && !el.classList.contains('erro'));
+        });
         if (erroDatas) msgs.push(erroDatas);
         var av = $('aviso');
         av.hidden = msgs.length === 0;
@@ -454,6 +480,9 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
         $('r-ilhas').setAttribute('aria-pressed', !st.outra && st.ret === RET_ILHAS);
         $('r-outra').setAttribute('aria-pressed', st.outra);
         if (!st.outra && document.activeElement !== $('ret')) { $('ret').value = ''; $('ret').classList.remove('erro'); }
+        desenharPrazos();
+        $('dias').closest('.campo').classList.toggle('usado', origem === 'dias' && $('dias').value !== '');
+        document.querySelector('.datas').classList.toggle('usado', origem === 'datas' && $('d-fim').value !== '');
         document.querySelectorAll('[data-dias]').forEach(function (b) { b.setAttribute('aria-checked', Number(b.dataset.dias) === st.preset); });
         document.querySelectorAll('[data-base]').forEach(function (b) { b.setAttribute('aria-pressed', Number(b.dataset.base) === st.base); });
         document.querySelectorAll('[data-cap]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.cap === st.cap); });
@@ -465,18 +494,53 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
         if (tc) tc.setAttribute('content', st.tipo === 'compound' ? '#047857' : '#1e40af');
     }
 
-    /* Campos só com números */
-    function limpaDecimal(e) { e.target.value = e.target.value.replace(/[^\d.,\s]/g, ''); atualizar(); }
+    /* Campos só com números: o ponto passa a vírgula e só há uma vírgula decimal */
+    function soNumero(txt, maxDec) {
+        var t = String(txt).replace(/[^\d.,]/g, ''), i;
+        if (t.indexOf(',') > -1) t = t.replace(/\./g, ''); else t = t.replace(/\./g, ',');
+        i = t.indexOf(',');
+        if (i > -1) t = t.slice(0, i + 1) + t.slice(i + 1).replace(/,/g, '');
+        if (i > -1 && maxDec >= 0) t = t.slice(0, i + 1 + maxDec);
+        return t;
+    }
+    /* Espaço a separar milhares: 10000 → 10 000 */
+    function agrupar(n) {
+        var i = n.indexOf(','), inteiro = i > -1 ? n.slice(0, i) : n, resto = i > -1 ? n.slice(i) : '';
+        return inteiro.replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + resto;
+    }
+    /* Posição do cursor depois de reformatar: mantém-no depois do mesmo nº de caracteres úteis */
+    function posDepois(fmt, uteis) {
+        var c = 0, i;
+        if (uteis <= 0) return 0;
+        for (i = 0; i < fmt.length; i++) {
+            if (fmt.charAt(i) !== ' ') c++;
+            if (c >= uteis) return i + 1;
+        }
+        return fmt.length;
+    }
+    function limpaDecimal(e) {
+        var el = e.target, v = el.value, md = el.id === 'montante' ? 2 : -1, pos = el.selectionStart;
+        var n = soNumero(v, md), novo = el.id === 'montante' ? agrupar(n) : n;
+        if (novo !== v) {
+            var np = posDepois(novo, soNumero(v.slice(0, pos), md).length);
+            el.value = novo;
+            try { el.setSelectionRange(np, np); } catch (x) { /* ignora */ }
+        }
+        atualizar();
+    }
     $('montante').addEventListener('input', limpaDecimal);
     $('taxa').addEventListener('input', limpaDecimal);
     $('montante').addEventListener('blur', function (e) {
         var n = parsePt(e.target.value);
-        if (n > 0 && n <= MAX_MONTANTE) e.target.value = n.toLocaleString('pt-PT', { maximumFractionDigits: 2 });
+        if (n > 0 && n <= MAX_MONTANTE) {
+            var t = n.toFixed(2).split('.');
+            e.target.value = agrupar(t[0]) + ',' + t[1]; /* sempre com 2 casas: 10 000,00 */
+        }
         atualizar();
     });
     $('dias').addEventListener('input', function (e) {
         e.target.value = e.target.value.replace(/\D/g, '');
-        modoDatas = false; st.preset = null; garantirIni(); dias2fim(); sincronizar(); atualizar();
+        origem = 'dias'; modoDatas = false; st.preset = null; garantirIni(); dias2fim(); sincronizar(); atualizar();
     });
     ['montante', 'taxa', 'dias'].forEach(function (id) {
         $(id).addEventListener('focus', function (e) { var el = e.target; setTimeout(function () { try { el.select(); } catch (x) {} }, 0); });
@@ -493,7 +557,7 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
     });
     $('ret').addEventListener('input', function (e) {
         var el = e.target, txt;
-        el.value = el.value.replace(/[^\d.,]/g, '');
+        el.value = soNumero(el.value);
         txt = el.value.trim();
         if (txt === '') {
             st.outra = false; st.ret = st.reg; el.classList.remove('erro');
@@ -510,12 +574,12 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
         e.target.classList.remove('erro');
         sincronizar();
     });
-    document.querySelectorAll('[data-dias]').forEach(function (b) {
-        b.addEventListener('click', function () {
-            var n = Number(b.dataset.dias);
-            if (PRAZOS.indexOf(n) < 0) n = 365;
-            st.preset = n; $('dias').value = String(n); modoDatas = false; garantirIni(); dias2fim(); sincronizar(); atualizar();
-        });
+    $('prazos').addEventListener('click', function (e) {
+        var b = e.target.closest('[data-dias]');
+        if (!b) return;
+        var n = Number(b.dataset.dias);
+        if (!(n >= 1 && n <= MAX_DIAS)) return;
+        origem = 'preset'; st.preset = n; $('dias').value = String(n); modoDatas = false; garantirIni(); dias2fim(); sincronizar(); atualizar();
     });
     document.querySelectorAll('[data-base]').forEach(function (b) {
         b.addEventListener('click', function () { st.base = Number(b.dataset.base) === 365 ? 365 : 360; sincronizar(); atualizar(); });
@@ -564,11 +628,18 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
         ['d-ini', 'd-fim'].forEach(function (id) { $(id).classList.toggle('tem', !!$(id).value); });
     }
     function atualizarGuia(m, t, d) {
+        var foco = document.activeElement, id = foco ? foco.id : '';
         var alvo = !(m > 0) ? 'montante' : !(t > 0) ? 'taxa' : !(d > 0) ? 'prazo' : null;
+        /* enquanto se escreve, o destaque fica no campo atual; passa ao seguinte quando se sai dele */
+        if (alvo && id === 'montante' && m > 0) alvo = 'montante';
+        else if (alvo === 'prazo' && id === 'taxa' && t > 0) alvo = 'taxa';
         $('montante').closest('.campo').classList.toggle('guia', alvo === 'montante');
         $('taxa').closest('.campo').classList.toggle('guia', alvo === 'taxa');
+        $('dias').closest('.campo').classList.toggle('guia', alvo === 'prazo');
         document.querySelector('.prazos').classList.toggle('guia', alvo === 'prazo');
-        $('comece').classList.toggle('ver', alvo === 'montante' && document.activeElement !== $('montante'));
+        $('comece').classList.toggle('ver', alvo === 'montante' && id !== 'montante');
+        $('comece-taxa').classList.toggle('ver', alvo === 'taxa' && id !== 'taxa');
+        $('comece-prazo').classList.toggle('ver', alvo === 'prazo');
     }
     function marcarErroDatas() { $('d-fim').parentNode.classList.toggle('erro', !!erroDatas); }
     /* dias → data de fim */
@@ -593,20 +664,31 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
         marcarErroDatas();
     }
     function aoMudarIni() {
-        if (modoDatas && !isNaN(utc($('d-fim').value))) { st.preset = null; datas2dias(); }
+        if (modoDatas && !isNaN(utc($('d-fim').value))) { origem = 'datas'; st.preset = null; datas2dias(); }
         else dias2fim();
         sincronizar(); atualizar();
     }
     function aoMudarFim() {
-        modoDatas = true; st.preset = null; garantirIni(); datas2dias();
+        origem = 'datas'; modoDatas = true; st.preset = null; garantirIni(); datas2dias();
         sincronizar(); atualizar();
     }
     ['input', 'change'].forEach(function (ev) {
         $('d-ini').addEventListener(ev, aoMudarIni);
         $('d-fim').addEventListener(ev, aoMudarFim);
     });
-    $('montante').addEventListener('focus', function () { atualizar(); });
-    $('montante').addEventListener('blur', function () { atualizar(); });
+    ['montante', 'taxa', 'dias'].forEach(function (id) {
+        $(id).addEventListener('focus', function () { atualizar(); });
+        $(id).addEventListener('blur', function () { atualizar(); });
+    });
+    /* Enter (ou «Seguinte» no teclado do telemóvel) passa ao campo seguinte: montante → taxa → dias */
+    var ORDEM = ['montante', 'taxa', 'dias'];
+    ORDEM.forEach(function (id, i) {
+        $(id).addEventListener('keydown', function (e) {
+            if (e.key !== 'Enter' && e.keyCode !== 13) return;
+            e.preventDefault();
+            if (ORDEM[i + 1]) $(ORDEM[i + 1]).focus(); else e.target.blur();
+        });
+    });
     /* Menu de três linhas */
     function fecharMenuApp() {
         $('appmenu-lista').hidden = true;
@@ -621,6 +703,31 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
     });
     document.addEventListener('click', function (e) { if (!e.target.closest('.appmenu')) fecharMenuApp(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fecharMenuApp(); });
+    /* Instalar no telemóvel (PWA) */
+    var pedidoInstalar = null, tempoAviso = 0;
+    function aviso(txt) {
+        var t = $('toast');
+        t.textContent = txt; t.hidden = false;
+        clearTimeout(tempoAviso);
+        tempoAviso = setTimeout(function () { t.hidden = true; }, 9000);
+    }
+    $('toast').addEventListener('click', function () { this.hidden = true; });
+    if (window.matchMedia('(display-mode: standalone)').matches || navigator.standalone) $('m-instalar').hidden = true;
+    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); pedidoInstalar = e; });
+    window.addEventListener('appinstalled', function () { pedidoInstalar = null; $('m-instalar').hidden = true; aviso('App instalada.'); });
+    $('m-instalar').addEventListener('click', function () {
+        fecharMenuApp();
+        if (pedidoInstalar) {
+            pedidoInstalar.prompt();
+            pedidoInstalar.userChoice.then(function () { pedidoInstalar = null; }, function () { /* ignora */ });
+        } else if (!/^https:$/.test(location.protocol) && location.hostname !== 'localhost') {
+            aviso('A instalação só funciona com a página alojada em https.');
+        } else if (/iphone|ipad|ipod/i.test(navigator.userAgent)) {
+            aviso('No iPhone, abra no Safari, toque em Partilhar e depois em «Adicionar ao ecrã principal».');
+        } else {
+            aviso('Abra o menu do navegador (⋮) e escolha «Instalar aplicação» ou «Adicionar ao ecrã principal».');
+        }
+    });
     $('m-sair').addEventListener('click', function () {
         fecharMenuApp();
         try { window.close(); } catch (x) { /* ignora */ }
@@ -629,7 +736,7 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
     $('limpar').addEventListener('click', function () {
         $('montante').value = ''; $('taxa').value = ''; $('dias').value = '';
         $('d-ini').value = ''; $('d-fim').value = ''; $('ret').blur();
-        st.preset = null; modoDatas = false; erroDatas = '';
+        st.preset = null; origem = null; modoDatas = false; erroDatas = '';
         marcarErroDatas(); sincronizar(); atualizar();
         if (document.activeElement && document.activeElement.blur) document.activeElement.blur();
     });

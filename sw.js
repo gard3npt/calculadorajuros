@@ -1,23 +1,14 @@
-/* Service worker da Calculadora de Juros (PWA).
-   - Guarda a página e os ícones para abrir mesmo sem rede.
-   - Só trata pedidos do mesmo site: anúncios (AdSense) e outros domínios passam sempre pela rede, sem interferência.
-   - Para forçar a atualização depois de alterar a página, mude o número da versão abaixo. */
-var VERSAO = 'simulador-juros-v1';
+/* Service worker: permite instalar a app e abri-la sem rede.
+   Quando alterar o index.html, mude o número da versão abaixo para os telemóveis atualizarem. */
+var VERSAO = 'calc-juros-v1';
 var FICHEIROS = [
-    './',
-    './index.html',
-    './manifest.json',
-    './icons/icon-192.png',
-    './icons/icon-512.png',
-    './icons/icon-maskable-192.png',
-    './icons/icon-maskable-512.png',
-    './icons/apple-touch-icon.png',
-    './icons/favicon-64.png'
+    './', 'index.html', 'manifest.json',
+    'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png',
+    'icons/apple-touch-icon.png', 'icons/favicon-64.png'
 ];
 
 self.addEventListener('install', function (e) {
-    e.waitUntil(caches.open(VERSAO).then(function (c) { return c.addAll(FICHEIROS); }));
-    self.skipWaiting();
+    e.waitUntil(caches.open(VERSAO).then(function (c) { return c.addAll(FICHEIROS); }).then(function () { return self.skipWaiting(); }));
 });
 
 self.addEventListener('activate', function (e) {
@@ -29,29 +20,18 @@ self.addEventListener('activate', function (e) {
 });
 
 self.addEventListener('fetch', function (e) {
-    var req = e.request, url = new URL(req.url);
-    if (req.method !== 'GET' || url.origin !== self.location.origin) return;   /* anúncios e outros domínios: não mexer */
-
+    var req = e.request;
+    if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
     if (req.mode === 'navigate') {
-        /* Página: tenta a rede (para ter sempre a versão mais recente) e usa a cópia guardada se estiver sem ligação */
+        /* página: tenta a rede (versão mais recente) e, sem rede, usa a guardada */
         e.respondWith(
-            fetch(req).then(function (resp) {
-                var copia = resp.clone();
-                caches.open(VERSAO).then(function (c) { c.put('./',
-    './index.html', copia); });
-                return resp;
-            }).catch(function () { return caches.match('./index.html'); })
+            fetch(req).then(function (r) {
+                var copia = r.clone();
+                caches.open(VERSAO).then(function (c) { c.put('index.html', copia); });
+                return r;
+            }).catch(function () { return caches.match('index.html'); })
         );
         return;
     }
-    /* Restantes ficheiros do site: cópia guardada primeiro, rede como alternativa */
-    e.respondWith(
-        caches.match(req).then(function (guardado) {
-            return guardado || fetch(req).then(function (resp) {
-                var copia = resp.clone();
-                caches.open(VERSAO).then(function (c) { c.put(req, copia); });
-                return resp;
-            });
-        })
-    );
+    e.respondWith(caches.match(req).then(function (r) { return r || fetch(req); }));
 });

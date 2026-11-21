@@ -1,7 +1,8 @@
 {
-  "name": "Calculadora de Juros (Mobile)",
+  "id": "./",
+  "name": "Calculadora de Juros",
   "short_name": "Calc. Juros",
-  "description": "Calculadora de depósitos a prazo: TANB (juros simples) e juros compostos, com retenção na fonte.",
+  "description": "Simulador de juros de depósitos a prazo: TANB e juros compostos.",
   "lang": "pt-PT",
   "start_url": "./",
   "scope": "./",
@@ -23,17 +24,10 @@
       "purpose": "any"
     },
     {
-      "src": "icons/icon-maskable-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
       "src": "icons/icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
-  ],
-  "id": "./"
+  ]
 }
