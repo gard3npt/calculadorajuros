@@ -722,12 +722,21 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
             pedidoInstalar.userChoice.then(function () { pedidoInstalar = null; }, function () { /* ignora */ });
         } else if (!/^https:$/.test(location.protocol) && location.hostname !== 'localhost') {
             aviso('A instalação só funciona com a página alojada em https.');
-        } else if (/iphone|ipad|ipod/i.test(navigator.userAgent)) {
-            aviso('No iPhone, abra no Safari, toque em Partilhar e depois em «Adicionar ao ecrã principal».');
         } else {
-            aviso('Abra o menu do navegador (⋮) e escolha «Instalar aplicação» ou «Adicionar ao ecrã principal».');
+            diagnosticar().then(function (falhas) {
+                if (falhas.length) aviso('Não encontro no servidor: ' + falhas.join(', ') + '. Publique estes ficheiros junto do index.html.');
+                else if (/iphone|ipad|ipod/i.test(navigator.userAgent)) aviso('No iPhone, abra no Safari, toque em Partilhar e depois em «Adicionar ao ecrã principal».');
+                else aviso('Abra o menu do navegador (⋮) e escolha «Instalar aplicação» ou «Adicionar ao ecrã principal».');
+            });
         }
     });
+    /* Confirma que os ficheiros da instalação existem no servidor */
+    function diagnosticar() {
+        var lista = ['manifest.json', 'sw.js', 'icons/icon-192.png', 'icons/icon-512.png'], falhas = [];
+        return Promise.all(lista.map(function (u) {
+            return fetch(u, { cache: 'no-store' }).then(function (r) { if (!r.ok) falhas.push(u); }, function () { falhas.push(u); });
+        })).then(function () { return falhas; });
+    }
     $('m-sair').addEventListener('click', function () {
         fecharMenuApp();
         try { window.close(); } catch (x) { /* ignora */ }

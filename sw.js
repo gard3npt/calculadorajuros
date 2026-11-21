@@ -1,6 +1,6 @@
 /* Service worker: permite instalar a app e abri-la sem rede.
    Quando alterar o index.html, mude o número da versão abaixo para os telemóveis atualizarem. */
-var VERSAO = 'calc-juros-v1';
+var VERSAO = 'calc-juros-v2';
 var FICHEIROS = [
     './', 'index.html', 'manifest.json',
     'icons/icon-192.png', 'icons/icon-512.png', 'icons/icon-maskable-512.png',
@@ -8,7 +8,10 @@ var FICHEIROS = [
 ];
 
 self.addEventListener('install', function (e) {
-    e.waitUntil(caches.open(VERSAO).then(function (c) { return c.addAll(FICHEIROS); }).then(function () { return self.skipWaiting(); }));
+    /* guarda um a um: se faltar algum ficheiro, o service worker instala-se na mesma */
+    e.waitUntil(caches.open(VERSAO).then(function (c) {
+        return Promise.all(FICHEIROS.map(function (f) { return c.add(f).catch(function () { /* ignora */ }); }));
+    }).then(function () { return self.skipWaiting(); }));
 });
 
 self.addEventListener('activate', function (e) {
