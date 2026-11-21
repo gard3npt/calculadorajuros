@@ -1,6 +1,6 @@
 /* Service worker: permite instalar a app e abri-la sem rede.
    Quando alterar o index.html, mude o número da versão abaixo para os telemóveis atualizarem. */
-var VERSAO = 'calc-juros-v4';
+var VERSAO = 'calc-juros-v1';
 var FICHEIROS = [
     './', 'index.html', 'manifest.json',
     'icon-192.png', 'icon-512.png', 'icon-maskable-512.png',
@@ -22,19 +22,26 @@ self.addEventListener('activate', function (e) {
     );
 });
 
+/* Só trata os ficheiros desta calculadora; qualquer outra página ou app do mesmo endereço fica de fora */
+var BASE = new URL('./', self.location.href).href;
+var MEUS = FICHEIROS.map(function (f) { return new URL(f, BASE).href; });
+
 self.addEventListener('fetch', function (e) {
-    var req = e.request;
-    if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
+    var req = e.request, url;
+    if (req.method !== 'GET') return;
+    url = new URL(req.url);
+    url.search = ''; url.hash = '';
+    if (MEUS.indexOf(url.href) < 0) return;
     /* rede primeiro (ficheiros sempre atualizados); sem rede, usa a cópia guardada */
     e.respondWith(
         fetch(req).then(function (r) {
             if (r && r.ok) {
                 var copia = r.clone();
-                caches.open(VERSAO).then(function (c) { c.put(req.mode === 'navigate' ? 'index.html' : req, copia); });
+                caches.open(VERSAO).then(function (c) { c.put(req.mode === 'navigate' ? 'index.html' : url.href, copia); });
             }
             return r;
         }).catch(function () {
-            return caches.match(req).then(function (r) { return r || (req.mode === 'navigate' ? caches.match('index.html') : undefined); });
+            return caches.match(req.mode === 'navigate' ? 'index.html' : url.href);
         })
     );
 });
