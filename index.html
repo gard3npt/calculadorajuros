@@ -6,8 +6,8 @@
 <meta name="theme-color" content="#1e40af">
 <title>Calculadora de Juros (Mobile)</title>
 <link rel="manifest" href="manifest.json">
-<link rel="icon" type="image/png" href="icons/favicon-64.png">
-<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="favicon-64.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Calc. Juros">
@@ -208,7 +208,7 @@ input::placeholder { color: #d3dbe6; font-weight: 600; opacity: 1; }
 }
 .burger[aria-expanded="true"] { border-color: var(--cor); background: var(--cor-clara); color: var(--cor); }
 .appmenu-lista {
-    position: absolute; top: calc(100% + 8px); right: 0; z-index: 50; width: 250px; padding: 6px;
+    position: absolute; top: calc(100% + 8px); right: 0; z-index: 50; width: max-content; min-width: 250px; max-width: calc(100vw - 28px); padding: 6px;
     background: #fff; border: 2px solid var(--borda); border-radius: 16px; box-shadow: 0 14px 34px rgba(15,23,42,.3);
 }
 .appmenu-lista[hidden] { display: none; }
@@ -217,6 +217,31 @@ input::placeholder { color: #d3dbe6; font-weight: 600; opacity: 1; }
     border: 0; border-radius: 10px; background: transparent; color: var(--texto); text-align: left; cursor: pointer;
     font: inherit; font-size: 1.05rem; font-weight: 700;
 }
+.am-item[hidden], .am-ajuda[hidden] { display: none; }
+.am-item .ic-instalar { color: #2563eb; }
+.am-item .ic-partilha { color: #7c3aed; }
+.am-item .ic-atualizar { color: #059669; }
+.am-item .f5 { display: none; }
+@media (hover: hover) and (pointer: fine) { .am-item .f5 { display: inline; color: var(--suave); font-weight: 600; } }
+.am-sep { height: 1px; margin: 6px 4px; background: var(--borda); }
+.am-logout {
+    display: flex; align-items: center; gap: 12px; width: calc(100% - 4px); min-height: 50px; margin: 2px 2px 0; padding: 0 12px;
+    border: 1.5px solid #fca5a5; border-radius: 10px; background: #fef2f2; color: #dc2626; cursor: pointer;
+    font: inherit; font-size: 1.05rem; font-weight: 800; text-align: left;
+}
+.am-logout:active { background: #fee2e2; }
+.am-rodape { margin: 8px 0 0; padding: 10px 12px 6px; border-top: 1px solid var(--borda); font-size: .74rem; line-height: 1.5; color: var(--suave); }
+.am-rodape p { margin: 0; white-space: nowrap; }
+.am-ajuda { margin: 0; padding: 4px 12px 10px; font-size: .85rem; line-height: 1.4; color: var(--suave); }
+.saida { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--fundo); }
+.saida[hidden] { display: none; }
+.saida-c { width: 100%; max-width: 360px; text-align: center; }
+.saida-c h2 { margin: 0 0 8px; font-size: 1.5rem; }
+.saida-c p { margin: 0 0 20px; color: var(--suave); line-height: 1.45; }
+.saida-b, .saida-v { display: block; width: 100%; min-height: 52px; margin-top: 10px; border-radius: 14px; font: inherit; font-size: 1.05rem; font-weight: 800; text-decoration: none; cursor: pointer; }
+.saida-b { background: var(--cor); color: #fff; border: 0; line-height: 52px; }
+.saida-v { background: #fff; color: var(--texto); border: 2px solid var(--borda); line-height: 48px; }
+.am-ajuda[hidden] { display: none; }
 .am-item:active { background: var(--cor-clara); color: var(--cor); }
 .am-item svg { flex: 0 0 auto; color: var(--suave); }
 button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
@@ -240,10 +265,28 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
             <nav class="appmenu-lista" id="appmenu-lista" aria-label="Menu da aplicação" hidden>
                 <!-- FUTURO: acrescentar aqui, como novos botões «am-item», Sobre, Contacto, «O que é TANB e juros compostos»
                      e as ligações exigidas pelo AdSense (por exemplo Política de Privacidade e gestão de consentimento). -->
-                <button type="button" class="am-item" id="m-sair">
-                    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M16 8l4 4-4 4M20 12H9"/></svg>
-                    Sair da app
+                <button type="button" class="am-item" id="m-instalar" hidden>
+                    <svg class="ic ic-instalar" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+                    Instalar app
                 </button>
+                <p class="am-ajuda" id="m-ajuda" hidden>No iPhone: toque em <b>Partilhar</b> e depois em <b>Adicionar ao ecrã principal</b>.</p>
+                <button type="button" class="am-item" id="m-partilhar">
+                    <svg class="ic ic-partilha" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg>
+                    <span id="m-partilhar-t">Partilhar o site</span>
+                </button>
+                <button type="button" class="am-item" id="m-atualizar">
+                    <svg class="ic ic-atualizar" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+                    <span>Atualizar<span class="f5"> (F5)</span></span>
+                </button>
+                <div class="am-sep"></div>
+                <button type="button" class="am-logout" id="m-sair">
+                    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M16 8l4 4-4 4M20 12H9"/></svg>
+                    Logout
+                </button>
+                <div class="am-rodape">
+                    <p>Desenvolvido por: Helder Jardim Fernandes</p>
+                    <p>Última atualização: <span id="data-atual"></span></p>
+                </div>
             </nav>
         </div>
     </header>
@@ -352,6 +395,15 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
     <p class="nota">Valores indicativos. Não substituem a informação do banco.</p>
 </main>
 
+<div class="saida" id="saida" role="dialog" aria-modal="true" aria-labelledby="saida-t" hidden>
+    <div class="saida-c">
+        <h2 id="saida-t">Sessão terminada</h2>
+        <p>O navegador não permite que esta página se feche sozinha. Já pode fechar esta janela ou a app.</p>
+        <a class="saida-b" id="saida-home" href="https://gard3npt.github.io/">Abrir a página inicial</a>
+        <button type="button" class="saida-v" id="saida-voltar">Voltar à calculadora</button>
+    </div>
+</div>
+
 <script>
 (function () {
     'use strict';
@@ -363,7 +415,8 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
     var st = { tipo: 'tanb', ret: RET_CONT, base: 360, cap: 'diaria', preset: null, outra: false, reg: RET_CONT };
     var PRAZOS = [30, 90, 180, 365];
     var erroDatas = '', modoDatas = false;
-    var URL_INICIO = 'https://gard3npt.github.io/'; /* para onde «Sair da app» vai quando o navegador não deixa fechar a janela */
+    var DATA_ATUALIZACAO = '2026-11-22'; /* AAAA-MM-DD: mudar sempre que a página for atualizada */
+    var URL_INICIO = 'https://gard3npt.github.io/'; /* ligação do ecrã de despedida, quando o navegador não deixa fechar a janela */
     var $ = function (id) { return document.getElementById(id); };
 
     function parsePt(val, pct) {
@@ -607,6 +660,33 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
     });
     $('montante').addEventListener('focus', function () { atualizar(); });
     $('montante').addEventListener('blur', function () { atualizar(); });
+    /* Data de atualização e botão «Instalar app» (só aparece enquanto a app não está instalada) */
+    (function () {
+        var p = DATA_ATUALIZACAO.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2]);
+        $('data-atual').textContent = isNaN(d) ? DATA_ATUALIZACAO : d.toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' });
+    })();
+    var pedidoInstalar = null;
+    var ehIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
+    function jaInstalada() {
+        return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+    }
+    function atualizarInstalar() {
+        $('m-instalar').hidden = jaInstalada() || !(pedidoInstalar || ehIOS);
+        if ($('m-instalar').hidden) $('m-ajuda').hidden = true;
+    }
+    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); pedidoInstalar = e; atualizarInstalar(); });
+    window.addEventListener('appinstalled', function () { pedidoInstalar = null; atualizarInstalar(); });
+    $('m-instalar').addEventListener('click', function () {
+        if (pedidoInstalar) {
+            var p = pedidoInstalar;
+            p.prompt();
+            p.userChoice.then(function () { pedidoInstalar = null; atualizarInstalar(); fecharMenuApp(); });
+        } else if (ehIOS) {
+            $('m-ajuda').hidden = !$('m-ajuda').hidden;   /* no iPhone não há botão automático: mostra os passos */
+        }
+    });
+    atualizarInstalar();
+
     /* Menu de três linhas */
     function fecharMenuApp() {
         $('appmenu-lista').hidden = true;
@@ -621,11 +701,37 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
     });
     document.addEventListener('click', function (e) { if (!e.target.closest('.appmenu')) fecharMenuApp(); });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fecharMenuApp(); });
+    $('m-partilhar').addEventListener('click', function () {
+        var dados = { title: 'Calculadora de Juros (Mobile)', text: 'Calculadora de juros para telemóvel: TANB e juros compostos.', url: location.origin + location.pathname };
+        var t = $('m-partilhar-t');
+        function aviso(txt) { t.textContent = txt; setTimeout(function () { t.textContent = 'Partilhar o site'; }, 2200); }
+        if (navigator.share) {
+            navigator.share(dados).then(fecharMenuApp, function () { /* cancelado: não faz nada */ });
+        } else if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(dados.url).then(function () { aviso('✅ Link copiado'); }, function () { window.prompt('Copie o endereço:', dados.url); });
+        } else {
+            window.prompt('Copie o endereço:', dados.url);
+        }
+    });
+    $('m-atualizar').addEventListener('click', function () {
+        fecharMenuApp();
+        var recarregar = function () { location.reload(); };
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.getRegistration().then(function (r) { return r ? r.update() : null; }).then(recarregar, recarregar);
+        } else { recarregar(); }
+    });
+    /* Logout: tenta fechar a janela/app. Se o navegador não deixar, mostra o ecrã de despedida */
+    $('saida-home').href = URL_INICIO;
     $('m-sair').addEventListener('click', function () {
         fecharMenuApp();
         try { window.close(); } catch (x) { /* ignora */ }
-        setTimeout(function () { window.location.href = URL_INICIO; }, 250);
+        try { window.open('', '_self'); window.close(); } catch (x) { /* ignora */ }
+        setTimeout(function () {
+            $('saida').hidden = false;
+            $('saida-voltar').focus();
+        }, 300);
     });
+    $('saida-voltar').addEventListener('click', function () { $('saida').hidden = true; });
     $('limpar').addEventListener('click', function () {
         $('montante').value = ''; $('taxa').value = ''; $('dias').value = '';
         $('d-ini').value = ''; $('d-fim').value = ''; $('ret').blur();
