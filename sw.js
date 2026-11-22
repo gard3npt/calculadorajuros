@@ -2,17 +2,17 @@
    - Guarda a página e os ícones para abrir mesmo sem rede.
    - Só trata pedidos do mesmo site: anúncios (AdSense) e outros domínios passam sempre pela rede, sem interferência.
    - Atualiza sozinho: basta substituir o index.html no site (não é preciso mexer neste ficheiro). */
-var VERSAO = 'calculadora-juros-v4';
+var VERSAO = 'calculadora-juros-v5';
 var FICHEIROS = [
     './',
     './index.html',
     './manifest.json',
-    './favicon-64.png',
-    './icon-192.png',
-    './icon-512.png',
-    './icon-maskable-192.png',
-    './icon-maskable-512.png',
-    './apple-touch-icon.png'
+    './icons/favicon-64.png',
+    './icons/icon-192.png',
+    './icons/icon-512.png',
+    './icons/icon-maskable-192.png',
+    './icons/icon-maskable-512.png',
+    './icons/apple-touch-icon.png'
 ];
 
 self.addEventListener('install', function (e) {
