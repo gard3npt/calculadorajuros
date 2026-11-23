@@ -272,6 +272,13 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
 .pd-head .pd-modo button.on { background: #2563eb; color: #fff; cursor: default; }
 .pd-nota { margin: 3px 4px 0; font-size: 12px; color: #64748b; line-height: 1.35; }
 </style>
+<style id="menu-letras">
+/* Menu de três linhas: mesmo tipo e tamanho de letra nos 5 sites */
+.appmenu-lista, .appmenu-lista * { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif !important; }
+.appmenu-lista .am-item, .appmenu-lista .am-item span, .appmenu-lista .am-logout, .appmenu-lista .am-logout span { font-size: .9rem !important; font-weight: 400 !important; letter-spacing: normal !important; }
+.appmenu-lista .am-item, .appmenu-lista .am-logout { gap: 12px !important; }
+.appmenu-lista .am-rodape p, .appmenu-lista .am-rodape .am-upd { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif !important; font-size: 11px !important; font-weight: 400 !important; line-height: 1.5 !important; letter-spacing: normal !important; text-transform: none !important; text-align: left !important; white-space: nowrap; }
+</style>
 </head>
 <body data-tipo="tanb">
 <main class="app">
@@ -444,7 +451,7 @@ function dataAtualizacaoEfetiva() { return (!dataForcada && dataAuto) ? dataAuto
 function dataParaIso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
 function textoUltimaAtualizacao() {
     const v = dataAtualizacaoEfetiva(), d = new Date(v + 'T12:00:00');
-    return 'Atualização: ' + (isNaN(d) ? v : d.toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' }));
+    return 'Última atualização: ' + (isNaN(d) ? v : d.toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' }));
 }
 function atualizarDataMenu() {
     const el = document.getElementById('menuUpd');
@@ -1171,7 +1178,8 @@ obterDataAutomatica();
     /* Atualizar (igual em todos os sites): pede à rede a versão mais recente e limpa o service worker e as caches.
        A sessão e as definições mantêm-se. Se não houver ligação, não apaga nada. */
     try {
-        const r = await fetch(location.href.split('#')[0], { cache: 'reload' });
+        if (navigator.onLine === false) throw new Error('offline');
+        const r = await fetch(location.href.split('#')[0].split('?')[0] + '?_=' + Date.now(), { cache: 'reload' });   /* com ?_= não é respondido pela cache do service worker */
         if (!r.ok) throw new Error('http ' + r.status);
     } catch (e) {
         window.alert('Sem ligação à internet: não foi possível atualizar. Tente de novo quando estiver ligado.');
@@ -1213,11 +1221,5 @@ obterDataAutomatica();
     }
 })();
 </script>
-<style id="menu-letras">
-/* Menu de três linhas: mesmo tipo e tamanho de letra nos 5 sites */
-.appmenu-lista, .appmenu-lista * { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif !important; }
-.appmenu-lista .am-item, .appmenu-lista .am-logout { font-size: .9rem !important; font-weight: 400 !important; letter-spacing: normal !important; }
-.am-rodape p, .am-rodape .am-upd { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif !important; font-size: 11px !important; font-weight: 400 !important; line-height: 1.5 !important; letter-spacing: normal !important; text-transform: none !important; text-align: left !important; padding: 0 !important; margin: 0 !important; color: var(--suave) !important; }
-</style>
 </body>
 </html>

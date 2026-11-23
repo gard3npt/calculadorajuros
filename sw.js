@@ -1,77 +1,82 @@
-/* Service worker da Calculadora de Juros (PWA).
-   - Guarda a página e os ícones para abrir mesmo sem rede.
-   - Só trata pedidos do mesmo site: anúncios (AdSense) e outros domínios passam sempre pela rede, sem interferência.
-   - Atualiza sozinho: basta substituir o index.html no site (não é preciso mexer neste ficheiro). */
-var VERSAO = 'calculadora-juros-v5';
-var FICHEIROS = [
+/* Service worker da Calculadora de Juros (Mobile).
+   Atualiza sozinho: basta substituir o index.html no site (não é preciso mexer neste ficheiro).
+   - Página (index.html): rede primeiro, para veres sempre a versão mais recente; sem ligação usa a cópia guardada.
+   - Ícones e restantes ficheiros do site: mostra a cópia guardada e atualiza-a em segundo plano.
+   - Anúncios (AdSense) e outros endereços externos passam direto, sem serem guardados.
+   - Pedidos «sem cache» (botão Atualizar, diagnóstico) vão sempre à rede. */
+const CACHE_VERSION = 'v5';
+const CACHE_NAME = 'calculadora-juros-' + CACHE_VERSION;
+const PRECACHE = [
     './',
     './index.html',
     './manifest.json',
-    './icons/favicon-64.png',
-    './icons/icon-192.png',
-    './icons/icon-512.png',
-    './icons/icon-maskable-192.png',
-    './icons/icon-maskable-512.png',
-    './icons/apple-touch-icon.png'
+    './favicon-64.png',
+    './icon-192.png',
+    './icon-512.png',
+    './icon-maskable-192.png',
+    './icon-maskable-512.png',
+    './apple-touch-icon.png'
 ];
 
-self.addEventListener('install', function (e) {
-    /* Guarda cada ficheiro à parte: se algum faltar no site, os outros ficam guardados na mesma */
-    e.waitUntil(caches.open(VERSAO).then(function (c) {
-        return Promise.all(FICHEIROS.map(function (f) {
-            return fetch(f, { cache: 'reload' }).then(function (resp) {
-                if (resp.ok) return c.put(f, resp);
-            }).catch(function () { /* ignora */ });
-        }));
-    }));
-    self.skipWaiting();
-});
-
-self.addEventListener('activate', function (e) {
-    e.waitUntil(
-        caches.keys().then(function (nomes) {
-            return Promise.all(nomes.filter(function (n) { return n !== VERSAO; }).map(function (n) { return caches.delete(n); }));
-        }).then(function () { return self.clients.claim(); })
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            /* Um ficheiro em falta não deve impedir a instalação do service worker */
+            .then((cache) => Promise.all(PRECACHE.map((f) => cache.add(f).catch(() => {}))))
+            .then(() => self.skipWaiting())
     );
 });
 
-function guardar(chave, resp) {
-    if (resp && resp.ok) {
-        var copia = resp.clone();
-        caches.open(VERSAO).then(function (c) { c.put(chave, copia); });
-    }
-    return resp;
-}
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches.keys()
+            .then((keys) => Promise.all(
+                keys.filter((k) => k.startsWith('calculadora-juros-') && k !== CACHE_NAME)
+                    .map((k) => caches.delete(k))
+            ))
+            .then(() => self.clients.claim())
+    );
+});
 
-self.addEventListener('fetch', function (e) {
-    var req = e.request, url = new URL(req.url);
-    if (req.method !== 'GET' || url.origin !== self.location.origin) return;   /* anúncios e outros domínios: não mexer */
+self.addEventListener('fetch', (event) => {
+    const req = event.request;
+    if (req.method !== 'GET') return;
 
-    /* Página e manifest: rede primeiro (ignora a cache do GitHub Pages); sem ligação usa a cópia guardada */
+    const url = new URL(req.url);
+    /* Só trata pedidos do próprio site: AdSense e outros domínios seguem direto para a rede */
+    if (url.origin !== self.location.origin) return;
+    /* Pedidos «sem cache» vão sempre à rede */
+    if (req.cache === 'reload' || req.cache === 'no-store') return;
+
+    /* Página: tenta a rede primeiro e usa a cópia guardada sem ligação */
     if (req.mode === 'navigate') {
-        e.respondWith(
-            fetch(req.url, { cache: 'no-cache' }).then(function (resp) {
-                return guardar('./index.html', resp);
-            }).catch(function () { return caches.match('./index.html'); })
-        );
-        return;
-    }
-    if (/manifest\.json$/.test(url.pathname)) {
-        e.respondWith(
-            fetch(req.url, { cache: 'no-cache' }).then(function (resp) {
-                return guardar(req, resp);
-            }).catch(function () { return caches.match(req); })
+        event.respondWith(
+            fetch(req.url, { cache: 'no-cache' })
+                .then((res) => {
+                    if (res && res.ok) {
+                        const copy = res.clone();
+                        caches.open(CACHE_NAME).then((c) => c.put('./index.html', copy));
+                    }
+                    return res;
+                })
+                .catch(() => caches.match('./index.html').then((r) => r || caches.match('./')))
         );
         return;
     }
 
-    /* Restantes ficheiros: mostra a cópia guardada já e atualiza-a em segundo plano */
-    e.respondWith(
-        caches.match(req).then(function (guardado) {
-            var rede = fetch(req.url, { cache: 'no-cache' }).then(function (resp) {
-                return guardar(req, resp);
-            }).catch(function () { return guardado; });
-            return guardado || rede;
+    /* Restantes ficheiros: responde da cópia guardada e atualiza em segundo plano */
+    event.respondWith(
+        caches.match(req).then((cached) => {
+            const network = fetch(req.url, { cache: 'no-cache' })
+                .then((res) => {
+                    if (res && res.ok) {
+                        const copy = res.clone();
+                        caches.open(CACHE_NAME).then((c) => c.put(req, copy));
+                    }
+                    return res;
+                })
+                .catch(() => cached);
+            return cached || network;
         })
     );
 });
