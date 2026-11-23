@@ -56,29 +56,39 @@ header h1 .mob { white-space: nowrap; color: var(--cor); }
 .campo input:focus { border-color: var(--cor); background: #fff; box-shadow: 0 0 0 4px var(--cor-clara); }
 .campo input.erro { border-color: #dc2626; background: #fef2f2; }
 .campo .un { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); font-size: 1.3rem; font-weight: 800; color: var(--suave); pointer-events: none; }
-.linhad { display: grid; grid-template-columns: 1.3fr 1fr; gap: 8px; align-items: stretch; }
-.datasbox { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.dt {
-    display: flex; align-items: center; gap: 4px; min-height: 44px; margin: 0; padding: 0 6px 0 10px;
+.linhad { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.campo .dt {
+    display: flex; flex-direction: column; justify-content: center; min-width: 0; min-height: 60px; margin: 0; padding: 5px 8px 3px 12px;
     border: 2px solid var(--borda); border-radius: 12px; background: #f8fafc;
-    font-size: .75rem; font-weight: 700; color: var(--suave);
+    font-size: .75rem; font-weight: 700; line-height: 1.2; color: var(--suave);
 }
-.dt span { flex: 0 0 44px; }
+.dt span { flex: 0 0 auto; }
 .dt input[type="date"] {
-    flex: 1 1 auto; min-width: 0; width: 100%; height: 38px; margin: 0; padding: 0; border: 0; background: transparent;
-    font: inherit; font-size: .95rem; font-weight: 800; color: var(--texto); outline: none;
+    flex: 0 0 auto; min-width: 0; width: 100%; height: 32px; margin: 0; padding: 0; border: 0; background: transparent;
+    font: inherit; font-size: .9rem; font-weight: 800; color: var(--texto); text-align: left; outline: none; box-shadow: none;
 }
 .dt input[type="date"]::-webkit-calendar-picker-indicator { margin: 0; padding: 0 0 0 2px; width: 16px; }
-.dt:focus-within { border-color: var(--cor); background: #fff; box-shadow: 0 0 0 3px var(--cor-clara); }
-.dt.erro { border-color: #dc2626; background: #fef2f2; }
-.linhad .diasbox { min-height: 94px; }
-.linhad .diasbox input { position: absolute; inset: 0; width: 100%; height: 100%; padding: 0 50px 0 8px; font-size: 1.7rem; text-align: right; }
-.linhad .diasbox .un { right: 10px; font-size: 1rem; }
-.linha2 { display: grid; grid-template-columns: 1.5fr 1fr; gap: 10px; }
+.campo .dt:focus-within { border-color: var(--cor); background: #fff; box-shadow: 0 0 0 3px var(--cor-clara); }
+.linha2 .campo.usa input, .campo .dt.usa { border-color: var(--cor); background: #fff; box-shadow: 0 0 0 3px var(--cor-clara); }
+.campo .dt.erro { border-color: #dc2626; background: #fef2f2; }
+/* Montante | Taxa anual | Dias na mesma linha */
+.linha2 { display: grid; grid-template-columns: 1.7fr 1fr 1fr; gap: 8px; }
 .linha2 .campo { min-width: 0; }
-.linha2 .campo label { white-space: nowrap; font-size: .9rem; }
-.linha2 .campo input { height: 64px; padding: 0 30px 0 12px; font-size: 1.6rem; }
-.linha2 .campo .un { right: 10px; font-size: 1.1rem; }
+.linha2 .campo label { white-space: nowrap; font-size: .82rem; margin-left: 0; }
+.linha2 .campo input { height: 60px; padding: 0 22px 0 9px; font-size: clamp(1.05rem, 5.4vw, 1.5rem); }
+.linha2 .campo input.l1 { font-size: clamp(.95rem, 4.6vw, 1.25rem); }
+.linha2 .campo input.l2 { font-size: clamp(.8rem, 3.8vw, 1.05rem); }
+.linha2 .campo input#dias { padding-right: 9px; }
+.linha2 .campo .un { right: 7px; font-size: 1rem; }
+.linha2 .campo.cheio input { border-color: var(--cor); background: #fff; box-shadow: 0 0 0 3px var(--cor-clara); }
+.linha2 .campo.falta input { border-color: #d97706; background: #fffbeb; box-shadow: 0 0 0 3px #fef3c7; }
+.linha2 .campo.falta input:focus { border-color: var(--cor); background: #fff; box-shadow: 0 0 0 4px var(--cor-clara); }
+.linha2 .campo input.erro { border-color: #dc2626; background: #fef2f2; box-shadow: none; }
+.linha2 .campo.falta .caixa::after {
+    content: "!"; position: absolute; top: -7px; right: -4px; width: 18px; height: 18px; border-radius: 50%;
+    background: #d97706; color: #fff; font-size: .75rem; font-weight: 800; line-height: 18px; text-align: center; pointer-events: none;
+}
+.linha2 .campo.falta .caixa:focus-within::after { display: none; }
 .duo { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
 .campo + .duo { margin-top: 12px; }
 
@@ -91,7 +101,7 @@ header h1 .mob { white-space: nowrap; color: var(--cor); }
 }
 .prazos button b { display: block; font-size: 1.7rem; font-weight: 800; }
 .prazos button small { display: block; font-size: .78rem; font-weight: 700; opacity: .85; }
-.prazos button[aria-checked="true"] { border-color: var(--cor); background: var(--cor); color: #fff; }
+.prazos button[aria-checked="true"] { border-color: var(--cor); background: #fff; color: var(--cor); box-shadow: 0 0 0 3px var(--cor-clara); }
 .det { margin-top: 14px; border-top: 1px dashed var(--borda); }
 .det summary {
     display: flex; align-items: center; gap: 8px; min-height: 50px; cursor: pointer; list-style: none;
@@ -190,7 +200,7 @@ input::placeholder { color: #d3dbe6; font-weight: 600; opacity: 1; }
 }
 @keyframes salta { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
 .campo.guia input, .prazos.guia button { border-color: var(--cor); background: var(--cor-clara); animation: pulsa 1.6s ease-in-out infinite; }
-.prazos.guia button[aria-checked="true"] { background: var(--cor); }
+.prazos.guia button[aria-checked="true"] { background: #fff; }
 .campo { position: relative; }
 .comece {
     position: absolute; top: -1px; right: 0; display: none; padding: 2px 9px; border-radius: 999px;
@@ -217,7 +227,20 @@ input::placeholder { color: #d3dbe6; font-weight: 600; opacity: 1; }
     border: 0; border-radius: 10px; background: transparent; color: var(--texto); text-align: left; cursor: pointer;
     font: inherit; font-size: 1.05rem; font-weight: 400;
 }
-.am-item[hidden], .am-ajuda[hidden] { display: none; }
+.am-item[hidden], .am-ajuda[hidden], .am-sep[hidden] { display: none; }
+.apoio { position: fixed; inset: 0; z-index: 90; display: none; align-items: center; justify-content: center; padding: 16px; background: rgba(15,23,42,.6); backdrop-filter: blur(4px); }
+.apoio.ativo { display: flex; }
+.apoio-c { position: relative; width: 100%; max-width: 420px; padding: 26px 20px 20px; background: #fff; border-radius: 16px; text-align: center; box-shadow: 0 20px 25px -5px rgba(0,0,0,.15), 0 10px 10px -5px rgba(0,0,0,.05); }
+.apoio-c h3 { margin: 0 0 12px; padding-bottom: 8px; font-size: 1.2rem; color: var(--azul); border-bottom: 2px solid var(--azul); }
+.apoio-c p { margin: 0 0 18px; font-size: .95rem; line-height: 1.6; color: var(--suave); }
+.apoio-x { position: absolute; top: 6px; right: 10px; padding: 6px 10px; border: 0; background: none; font: inherit; font-size: 26px; line-height: 1; color: #94a3b8; cursor: pointer; }
+.apoio-op { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border: 1px solid #cbd5e1; border-radius: 10px; background: #f8fafc; color: #1e293b; text-align: left; text-decoration: none; font-size: 14px; font-weight: 600; }
+.apoio-op i { width: 38px; height: 38px; flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; border-radius: 10px; background: #e0e7ff; font-style: normal; font-size: 1.15rem; }
+.apoio-op span { display: flex; flex-direction: column; gap: 2px; }
+.apoio-op small { font-size: 12px; font-weight: 500; color: #64748b; }
+.apoio-op:hover { background: var(--azul); border-color: var(--azul); color: #fff; }
+.apoio-op:hover small { color: #dbeafe; }
+.apoio-op:hover i { background: rgba(255,255,255,.2); }
 .am-item .f5 { display: none; }
 @media (hover: hover) and (pointer: fine) { .am-item .f5 { display: inline; color: var(--suave); font-weight: 400; } }
 .am-sep { height: 1px; margin: 6px 4px; background: var(--borda); }
@@ -242,6 +265,11 @@ input::placeholder { color: #d3dbe6; font-weight: 600; opacity: 1; }
 .saida-v { background: #fff; color: var(--texto); border: 2px solid var(--borda); line-height: 48px; }
 .am-ajuda[hidden] { display: none; }
 .am-item:active { background: var(--cor-clara); color: var(--cor); }
+.am-item, .am-logout { transition: background .15s, box-shadow .15s; }
+@media (hover: hover) and (pointer: fine) {
+    .am-item:hover { background: #f1f5f9; box-shadow: 0 3px 10px rgba(15,23,42,.18); }
+    .am-logout:hover { background: #fee2e2; box-shadow: 0 3px 10px rgba(220,38,38,.25); }
+}
 .am-item svg { flex: 0 0 auto; color: var(--suave); }
 button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
 
@@ -298,11 +326,12 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
             <nav class="appmenu-lista" id="appmenu-lista" aria-label="Menu da aplicação" hidden>
                 <!-- FUTURO: acrescentar aqui, como novos botões «am-item», Sobre, Contacto, «O que é TANB e juros compostos»
                      e as ligações exigidas pelo AdSense (por exemplo Política de Privacidade e gestão de consentimento). -->
-                <button type="button" class="am-item" id="m-instalar">
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#60a5fa"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
-                    Instalar app
+                <div class="am-sep"></div>
+                <button type="button" class="am-item" id="m-apoiar">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#fb923c"><path d="M17 8h1a4 4 0 0 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><path d="M6 2v3M10 2v3M14 2v3"/></svg>
+                    <span>Apoiar o Projeto</span>
                 </button>
-                <p class="am-ajuda" id="m-ajuda" hidden></p>
+                <div class="am-sep"></div>
                 <button type="button" class="am-item" id="m-partilhar">
                     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#a78bfa"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg>
                     <span id="m-partilhar-t">Partilhar</span>
@@ -316,6 +345,12 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
                     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
                     Logout
                 </button>
+                <div class="am-sep" id="m-sep-inst"></div>
+                <button type="button" class="am-item" id="m-instalar">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#60a5fa"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+                    Instalar app
+                </button>
+                <p class="am-ajuda" id="m-ajuda" hidden></p>
                 <div class="am-rodape">
                     <p>Desenvolvido por: Helder Jardim Fernandes</p>
                     <button type="button" class="am-upd" id="menuUpd" onclick="triploClique(this, function () { fecharMenuApp(); abrirPainelDono(); })"></button>
@@ -333,17 +368,23 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
         <div class="linha2">
         <div class="campo">
             <label for="montante">Montante</label>
-            <span class="comece" id="comece" aria-hidden="true">Comece aqui <i>↓</i></span>
+            <span class="comece" id="comece" aria-hidden="true">Comece <i>↓</i></span>
             <div class="caixa">
-                <input id="montante" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next" placeholder="10 000">
+                <input id="montante" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next" placeholder="10 000,00">
                 <span class="un">€</span>
             </div>
         </div>
         <div class="campo">
             <label for="taxa">Taxa anual</label>
             <div class="caixa">
-                <input id="taxa" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="done" placeholder="2,5">
+                <input id="taxa" type="text" inputmode="decimal" autocomplete="off" enterkeyhint="next" placeholder="2,5">
                 <span class="un">%</span>
+            </div>
+        </div>
+        <div class="campo">
+            <label for="dias">Dias</label>
+            <div class="caixa">
+                <input id="dias" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="done" placeholder="365" aria-label="Número de dias">
             </div>
         </div>
         </div>
@@ -356,16 +397,10 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
                 <button type="button" role="radio" data-dias="365" aria-label="1 ano" aria-checked="true"><b>1</b><small>ano</small></button>
             </div>
             <div class="campo" style="margin-top:10px">
-                <label for="d-ini">Datas e dias a aplicar (pode editar)</label>
+                <label for="d-ini">Datas a aplicar (pode editar)</label>
                 <div class="linhad">
-                    <div class="datasbox">
-                        <label class="dt"><span>Início</span><input id="d-ini" type="date" aria-label="Data de início"></label>
-                        <label class="dt"><span>Fim</span><input id="d-fim" type="date" aria-label="Data de fim"></label>
-                    </div>
-                    <div class="caixa diasbox">
-                        <input id="dias" type="text" inputmode="numeric" autocomplete="off" enterkeyhint="done" placeholder="365" aria-label="Número de dias">
-                        <span class="un">dias</span>
-                    </div>
+                    <label class="dt"><span>Início</span><input id="d-ini" type="date" aria-label="Data de início"></label>
+                    <label class="dt"><span>Fim</span><input id="d-fim" type="date" aria-label="Data de fim"></label>
                 </div>
             </div>
         </div>
@@ -427,6 +462,18 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
 
     <p class="nota">Valores indicativos. Não substituem a informação do banco.</p>
 </main>
+
+<div class="apoio" id="apoio" role="dialog" aria-modal="true" aria-labelledby="apoio-t">
+    <div class="apoio-c">
+        <button type="button" class="apoio-x" id="apoio-x" aria-label="Fechar">&times;</button>
+        <h3 id="apoio-t">☕ Apoiar o Projeto</h3>
+        <p>Se gosta desta calculadora e das ferramentas desenvolvidas, pode apoiar o projeto com um café virtual.</p>
+        <a class="apoio-op" id="apoio-pp" href="https://paypal.me/gard3npt" target="_blank" rel="noopener noreferrer">
+            <i aria-hidden="true">💙</i>
+            <span><strong>Contribuir no PayPal</strong><small>Abre noutro separador</small></span>
+        </a>
+    </div>
+</div>
 
 <div class="saida" id="saida" role="dialog" aria-modal="true" aria-labelledby="saida-t" hidden>
     <div class="saida-c">
@@ -931,6 +978,14 @@ obterDataAutomatica();
             mostrar('o-brutos', fmt(r.brutos, 2) + ' €');
             mostrar('o-ret', fmt(r.retencao, 2) + ' €');
         }
+        var lm = $('montante').value.length;
+        $('montante').classList.toggle('l1', lm > 10 && lm <= 13);
+        $('montante').classList.toggle('l2', lm > 13);
+        [['montante', m], ['taxa', t], ['dias', d]].forEach(function (p) {
+            var c = $(p[0]).closest('.campo'), ok = p[1] > 0;
+            if (p[0] !== 'dias') c.classList.toggle('cheio', ok);   /* os dias têm o seu destaque («usa») */
+            c.classList.toggle('falta', !ok);
+        });
         atualizarGuia(m, t, d);
         marcarVazios();
         guardar();
@@ -947,6 +1002,10 @@ obterDataAutomatica();
         document.querySelectorAll('[data-dias]').forEach(function (b) { b.setAttribute('aria-checked', Number(b.dataset.dias) === st.preset); });
         document.querySelectorAll('[data-base]').forEach(function (b) { b.setAttribute('aria-pressed', Number(b.dataset.base) === st.base); });
         document.querySelectorAll('[data-cap]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.cap === st.cap); });
+        var nd = parseInt($('dias').value, 10) || 0;
+        var fonte = nd > 0 ? (modoDatas ? 'datas' : (st.preset ? 'prazo' : 'dias')) : '';
+        $('dias').closest('.campo').classList.toggle('usa', fonte === 'dias');
+        document.querySelectorAll('.dt').forEach(function (x) { x.classList.toggle('usa', fonte === 'datas'); });
         $('p-ret').textContent = pctTxt(st.ret) + ' %';
         $('r-cont').querySelector('.dir').textContent = pctTxt(RETENCAO_DEFEITO) + ' %';
         $('r-ilhas').querySelector('.dir').textContent = pctTxt(RETENCAO_ILHAS) + ' %';
@@ -957,15 +1016,54 @@ obterDataAutomatica();
         if (tc) tc.setAttribute('content', st.tipo === 'compound' ? '#047857' : '#1e40af');
     }
 
-    /* Campos só com números */
-    function limpaDecimal(e) { e.target.value = e.target.value.replace(/[^\d.,\s]/g, ''); atualizar(); }
-    $('montante').addEventListener('input', limpaDecimal);
-    $('taxa').addEventListener('input', limpaDecimal);
-    $('montante').addEventListener('blur', function (e) {
-        var n = parsePt(e.target.value);
-        if (n > 0 && n <= MAX_MONTANTE) e.target.value = n.toLocaleString('pt-PT', { maximumFractionDigits: 2 });
+    /* Campos decimais: o ponto passa sempre a vírgula; uma só vírgula; máximo de casas decimais */
+    function normDec(v, maxDec) {
+        v = String(v).replace(/[^\d.,\s]/g, '');
+        if (v.indexOf(',') > -1 && v.indexOf('.') > -1) v = v.replace(/\./g, '');   /* «1.234,56» (colado): pontos são milhares */
+        v = v.replace(/\./g, ',');
+        var i = v.indexOf(',');
+        if (i > -1) v = v.slice(0, i).trim() + ',' + v.slice(i + 1).replace(/\D/g, '').slice(0, maxDec);
+        return v;
+    }
+    function limpaDecimal(maxDec) {
+        return function (e) {
+            var n = normDec(e.target.value, maxDec);
+            if (n !== e.target.value) e.target.value = n;
+            atualizar();
+        };
+    }
+    $('taxa').addEventListener('input', limpaDecimal(4));
+    /* Montante: separador de milhares (espaço) enquanto se escreve; ao sair fica sempre com 2 casas */
+    function agrupar(t) { return t.replace(/\B(?=(\d{3})+(?!\d))/g, '\u00a0'); }
+    function fmtMont(n) { var p = n.toFixed(2).split('.'); return agrupar(p[0]) + ',' + p[1]; }
+    $('montante').addEventListener('input', function (e) {
+        var el = e.target, raw = el.value, pos = el.selectionStart == null ? raw.length : el.selectionStart;
+        var sig = normDec(raw.slice(0, pos), 2).replace(/[^\d,]/g, '').length;   /* dígitos/vírgula antes do cursor */
+        var n = normDec(raw, 2), i = n.indexOf(',');
+        var out = agrupar((i > -1 ? n.slice(0, i) : n).replace(/\s/g, '')) + (i > -1 ? n.slice(i) : '');
+        if (out !== raw) {
+            el.value = out;
+            var c = 0, k = 0;
+            while (k < out.length && c < sig) { if (/[\d,]/.test(out.charAt(k))) c++; k++; }
+            try { el.setSelectionRange(k, k); } catch (x) { /* ignora */ }
+        }
         atualizar();
     });
+    $('montante').addEventListener('blur', function (e) {
+        var n = parsePt(e.target.value);
+        if (n > 0 && n <= MAX_MONTANTE) e.target.value = fmtMont(n);   /* 1 000 → 1 000,00 */
+        atualizar();
+    });
+    /* Enter: Montante → Taxa → Dias (→ fecha o teclado); nas datas: Início → Fim */
+    function enterVai(id, destino) {
+        $(id).addEventListener('keydown', function (e) {
+            if (e.key !== 'Enter') return;
+            e.preventDefault();
+            if (destino) $(destino).focus(); else e.target.blur();
+        });
+    }
+    enterVai('montante', 'taxa'); enterVai('taxa', 'dias'); enterVai('dias', null);
+    enterVai('d-ini', 'd-fim'); enterVai('d-fim', null);
     $('dias').addEventListener('input', function (e) {
         e.target.value = e.target.value.replace(/\D/g, '');
         modoDatas = false; st.preset = null; garantirIni(); dias2fim(); sincronizar(); atualizar();
@@ -985,7 +1083,7 @@ obterDataAutomatica();
     });
     $('ret').addEventListener('input', function (e) {
         var el = e.target, txt;
-        el.value = el.value.replace(/[^\d.,]/g, '');
+        var nv = normDec(el.value, 3); if (nv !== el.value) el.value = nv;
         txt = el.value.trim();
         if (txt === '') {
             st.outra = false; st.ret = (st.reg === 'ilhas' ? RETENCAO_ILHAS : RETENCAO_DEFEITO); el.classList.remove('erro');
@@ -1057,8 +1155,6 @@ obterDataAutomatica();
     }
     function atualizarGuia(m, t, d) {
         var alvo = !(m > 0) ? 'montante' : !(t > 0) ? 'taxa' : !(d > 0) ? 'prazo' : null;
-        $('montante').closest('.campo').classList.toggle('guia', alvo === 'montante');
-        $('taxa').closest('.campo').classList.toggle('guia', alvo === 'taxa');
         document.querySelector('.prazos').classList.toggle('guia', alvo === 'prazo');
         $('comece').classList.toggle('ver', alvo === 'montante' && document.activeElement !== $('montante'));
     }
@@ -1120,6 +1216,7 @@ obterDataAutomatica();
     }
     function atualizarInstalar() {
         $('m-instalar').hidden = jaInstalada();
+        $('m-sep-inst').hidden = $('m-instalar').hidden;
         if ($('m-instalar').hidden) $('m-ajuda').hidden = true;
     }
     window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); pedidoInstalar = e; lembrar(false); atualizarInstalar(); });
@@ -1192,6 +1289,19 @@ obterDataAutomatica();
     $('m-atualizar').addEventListener('click', function () { fecharMenuApp(); atualizarApp(); });
     /* Logout: tenta fechar a janela/app. Se o navegador não deixar, mostra o ecrã de despedida */
     $('saida-home').href = URL_INICIO;
+    /* Apoiar o Projeto: janela igual à do simulador (ligação PayPal) */
+    var focoApoio = null;
+    function abrirApoio() { focoApoio = document.activeElement; $('apoio').classList.add('ativo'); $('apoio-x').focus(); }
+    function fecharApoio() {
+        $('apoio').classList.remove('ativo');
+        if (focoApoio && focoApoio.focus) focoApoio.focus();
+        focoApoio = null;
+    }
+    $('m-apoiar').addEventListener('click', function () { fecharMenuApp(); abrirApoio(); });
+    $('apoio-x').addEventListener('click', fecharApoio);
+    $('apoio-pp').addEventListener('click', fecharApoio);
+    $('apoio').addEventListener('click', function (e) { if (e.target === $('apoio')) fecharApoio(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && $('apoio').classList.contains('ativo')) fecharApoio(); });
     $('m-sair').addEventListener('click', function () {
         fecharMenuApp();
         try { window.close(); } catch (x) { /* ignora */ }
