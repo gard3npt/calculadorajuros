@@ -213,25 +213,24 @@ input::placeholder { color: #d3dbe6; font-weight: 600; opacity: 1; }
 }
 .appmenu-lista[hidden] { display: none; }
 .am-item {
-    display: flex; align-items: center; gap: 12px; width: 100%; min-height: 44px; margin: 0; padding: 0 12px;
+    display: flex; align-items: center; gap: 12px; width: 100%; min-height: 40px; margin: 0; padding: 0 12px;
     border: 0; border-radius: 10px; background: transparent; color: var(--texto); text-align: left; cursor: pointer;
-    font: inherit; font-size: 1.05rem; font-weight: 700;
+    font: inherit; font-size: 1.05rem; font-weight: 400;
 }
 .am-item[hidden], .am-ajuda[hidden] { display: none; }
-.am-item .ic-instalar { color: #2563eb; }
-.am-item .ic-partilha { color: #7c3aed; }
-.am-item .ic-atualizar { color: #059669; }
 .am-item .f5 { display: none; }
-@media (hover: hover) and (pointer: fine) { .am-item .f5 { display: inline; color: var(--suave); font-weight: 600; } }
+@media (hover: hover) and (pointer: fine) { .am-item .f5 { display: inline; color: var(--suave); font-weight: 400; } }
 .am-sep { height: 1px; margin: 6px 4px; background: var(--borda); }
 .am-logout {
-    display: flex; align-items: center; gap: 12px; width: calc(100% - 4px); min-height: 44px; margin: 2px 2px 0; padding: 0 12px;
+    display: flex; align-items: center; gap: 12px; width: calc(100% - 4px); min-height: 40px; margin: 2px 2px 0; padding: 0 12px;
     border: 1.5px solid #fca5a5; border-radius: 10px; background: #fef2f2; color: #dc2626; cursor: pointer;
-    font: inherit; font-size: 1.05rem; font-weight: 800; text-align: left;
+    font: inherit; font-size: 1.05rem; font-weight: 400; text-align: left;
 }
 .am-logout:active { background: #fee2e2; }
 .am-rodape { margin: 8px 0 0; padding: 10px 12px 6px; border-top: 1px solid var(--borda); font-size: .74rem; line-height: 1.5; color: var(--suave); }
 .am-rodape p { margin: 0; white-space: nowrap; }
+.am-rodape .am-upd { display: block; width: 100%; margin: 0; padding: 0; border: 0; background: none; font: inherit; color: inherit; text-align: left; white-space: nowrap; cursor: default; -webkit-tap-highlight-color: transparent; user-select: none; }
+.am-rodape .am-upd:focus-visible { outline: none; }
 .am-ajuda { margin: 0; padding: 4px 12px 10px; font-size: .85rem; line-height: 1.4; color: var(--suave); }
 .saida { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--fundo); }
 .saida[hidden] { display: none; }
@@ -245,6 +244,33 @@ input::placeholder { color: #d3dbe6; font-weight: 600; opacity: 1; }
 .am-item:active { background: var(--cor-clara); color: var(--cor); }
 .am-item svg { flex: 0 0 auto; color: var(--suave); }
 button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
+
+/* ===== Área de controlo (oculta: 3 toques na data de atualização do menu + senha) ===== */
+#painelDonoOverlay { position: fixed; inset: 0; z-index: 99997; background: rgba(15,23,42,.6); display: flex; align-items: center; justify-content: center; padding: 12px; }
+#painelDonoOverlay > div { width: 100%; max-width: 480px; max-height: 90vh; display: flex; flex-direction: column; overflow: hidden; background: #f8fafc; color: #0f172a; border-radius: 14px; box-shadow: 0 10px 30px rgba(0,0,0,.4); }
+.pd-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: #0f172a; color: #fff; font-size: 1rem; }
+.pd-x { cursor: pointer; font-size: 26px; line-height: 1; padding: 0 4px; color: #cbd5e1; }
+.pd-body { overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; padding: 4px 14px 16px; text-align: left; }
+.pd-sec { margin: 18px 0 8px; padding: 16px 2px 0; border-top: 2px solid #cbd5e1; font-size: .7rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: #64748b; }
+.pd-sec:first-child { margin-top: 10px; padding-top: 0; border-top: 0; }
+.pd-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 2px 12px; }
+.pd-row { display: grid; grid-template-columns: 40% 1fr; gap: 8px; padding: 7px 0; border-bottom: 1px solid #eef2f7; font-size: 13px; word-break: break-word; }
+.pd-row:last-child { border-bottom: 0; }
+.pd-row span { color: #64748b; font-weight: 600; }
+.pd-row b { font-weight: 700; }
+.pd-aviso, .pd-ok { padding: 9px 12px; border-radius: 10px; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.pd-aviso { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
+.pd-ok { background: #dcfce7; color: #166534; border: 1px solid #86efac; }
+.pd-btn { display: block; box-sizing: border-box; width: 100%; margin-top: 8px; padding: 11px 14px; border: 0; border-radius: 10px; background: #e2e8f0; color: #0f172a; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; text-align: center; }
+.pd-btn:disabled { opacity: .6; cursor: default; }
+.pd-azul { background: #2563eb; color: #fff; }
+.pd-amarelo { background: #fde68a; color: #78350f; }
+.pd-lbl { display: block; margin-top: 8px; font-size: 12px; font-weight: 700; color: #475569; }
+.pd-input { display: block; box-sizing: border-box; width: 100%; margin-top: 4px; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; background: #fff; color: #0f172a; font: inherit; font-size: 15px; font-weight: 600; }
+.pd-head .pd-modo { display: inline-flex; gap: 6px; margin-left: 10px; vertical-align: middle; }
+.pd-head .pd-modo button { width: 32px; height: 30px; padding: 0; border: 0; border-radius: 8px; background: rgba(255,255,255,.14); color: #e2e8f0; font: inherit; font-size: 14px; font-weight: 800; cursor: pointer; line-height: 1; }
+.pd-head .pd-modo button.on { background: #2563eb; color: #fff; cursor: default; }
+.pd-nota { margin: 3px 4px 0; font-size: 12px; color: #64748b; line-height: 1.35; }
 </style>
 </head>
 <body data-tipo="tanb">
@@ -265,27 +291,27 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
             <nav class="appmenu-lista" id="appmenu-lista" aria-label="Menu da aplicação" hidden>
                 <!-- FUTURO: acrescentar aqui, como novos botões «am-item», Sobre, Contacto, «O que é TANB e juros compostos»
                      e as ligações exigidas pelo AdSense (por exemplo Política de Privacidade e gestão de consentimento). -->
-                <button type="button" class="am-item" id="m-instalar" hidden>
-                    <svg class="ic ic-instalar" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
+                <button type="button" class="am-item" id="m-instalar">
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#60a5fa"><path d="M12 3v12M7 10l5 5 5-5M5 21h14"/></svg>
                     Instalar app
                 </button>
-                <p class="am-ajuda" id="m-ajuda" hidden>No iPhone: toque em <b>Partilhar</b> e depois em <b>Adicionar ao ecrã principal</b>.</p>
+                <p class="am-ajuda" id="m-ajuda" hidden></p>
                 <button type="button" class="am-item" id="m-partilhar">
-                    <svg class="ic ic-partilha" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg>
-                    <span id="m-partilhar-t">Partilhar o site</span>
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#a78bfa"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-4M8.6 13.5l6.8 4"/></svg>
+                    <span id="m-partilhar-t">Partilhar</span>
                 </button>
                 <button type="button" class="am-item" id="m-atualizar">
-                    <svg class="ic ic-atualizar" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
-                    <span>Atualizar<span class="f5"> (F5)</span></span>
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="color:#34d399"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+                    <span>Atualizar</span>
                 </button>
                 <div class="am-sep"></div>
                 <button type="button" class="am-logout" id="m-sair">
-                    <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M16 8l4 4-4 4M20 12H9"/></svg>
+                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5"/><path d="M21 12H9"/></svg>
                     Logout
                 </button>
                 <div class="am-rodape">
                     <p>Desenvolvido por: Helder Jardim Fernandes</p>
-                    <p>Última atualização: <span id="data-atual"></span></p>
+                    <button type="button" class="am-upd" id="menuUpd" onclick="triploClique(this, function () { fecharMenuApp(); abrirPainelDono(); })"></button>
                 </div>
             </nav>
         </div>
@@ -405,17 +431,421 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
 </div>
 
 <script>
+/* ===== Valores que o dono pode alterar na Área de controlo (modo 2) ===== */
+/* Data da última atualização (AAAA-MM-DD): é só a data de reserva; a data mostrada é automática */
+let ULTIMA_ATUALIZACAO = '2026-11-22';
+// Normalmente false (data automática). Fica true só nas atualizações em que se escreveu uma data à mão na área de controlo.
+let DATA_MANUAL = false;
+/* A data é automática: vem da data de modificação do index.html no servidor (cabeçalho Last-Modified).
+   Se o servidor não a indicar, usa-se ULTIMA_ATUALIZACAO. Uma data aplicada na área de controlo prevalece. */
+let dataAuto = '';
+let dataForcada = DATA_MANUAL;
+function dataAtualizacaoEfetiva() { return (!dataForcada && dataAuto) ? dataAuto : ULTIMA_ATUALIZACAO; }
+function dataParaIso(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+function textoUltimaAtualizacao() {
+    const v = dataAtualizacaoEfetiva(), d = new Date(v + 'T12:00:00');
+    return 'Última atualização: ' + (isNaN(d) ? v : d.toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' }));
+}
+function atualizarDataMenu() {
+    const el = document.getElementById('menuUpd');
+    if (el) el.textContent = textoUltimaAtualizacao();
+}
+async function obterDataAutomatica() {
+    try {
+        let d = null;
+        if (/^https?:$/.test(location.protocol)) {
+            const r = await fetch(location.href.split('#')[0], { method: 'HEAD', cache: 'no-store' });
+            const lm = r.ok ? r.headers.get('Last-Modified') : null;
+            if (lm) d = new Date(lm);
+        } else if (document.lastModified) {
+            d = new Date(document.lastModified);
+        }
+        if (d && !isNaN(d)) { dataAuto = dataParaIso(d); atualizarDataMenu(); }
+    } catch (e) { /* sem data do servidor: fica a de ULTIMA_ATUALIZACAO */ }
+}
+/* Retenção na fonte por defeito (%): alterável na Área de controlo (modo 2) */
+let RETENCAO_DEFEITO = 28;   /* Portugal Continental */
+let RETENCAO_ILHAS = 19.6;   /* Açores e Madeira */
+
+/* ===== Erros desde que a página abriu (para o diagnóstico) ===== */
+window.__erros = [];
+function __regErro(tipo, msg) { if (window.__erros.length < 30) window.__erros.push({ t: Date.now(), tipo: tipo, msg: String(msg).slice(0, 160) }); }
+window.addEventListener('error', function (e) {
+    const alvo = e.target;
+    if (alvo && alvo !== window && (alvo.src || alvo.href)) __regErro('recurso', alvo.src || alvo.href);
+    else __regErro('erro', e.message);
+}, true);
+window.addEventListener('unhandledrejection', function (e) { __regErro('promessa', (e.reason && e.reason.message) || e.reason); });
+
+/* 3 cliques seguidos (em 1,5 s) para ativar a ação dos botões ocultos */
+function triploClique(el, fn, ev) {
+    el._n = (el._n || 0) + 1;
+    clearTimeout(el._t);
+    if (el._n >= 3) { el._n = 0; fn(ev); return; }
+    el._t = setTimeout(function () { el._n = 0; }, 1500);
+}
+
+/* ---------------- ÁREA DE CONTROLO (escondida) ----------------
+   Abre com 3 toques seguidos na data de atualização do menu (☰) + senha do dono (SENHA_DONO). */
+/* Senha do dono: para a mudar, alterar só o texto entre aspas.
+   Atenção: como o site corre no navegador, esta senha serve para evitar toques acidentais e não é uma proteção forte. */
+const SENHA_DONO = '112';
+/* Página de diagnóstico da app instalável (tem de estar na mesma pasta do index.html) */
+const DIAGNOSTICO_PWA = 'diagnostico-pwa.html';
+let dnDados = null;
+const pctTxt = (n) => String(n).replace('.', ',');
+
+function pdCaixa(id, z) {
+  const antigo = document.getElementById(id); if (antigo) antigo.remove();
+  const ov = document.createElement('div');
+  ov.id = id;
+  ov.style.cssText = 'position:fixed; inset:0; background:rgba(15,23,42,0.55); z-index:' + z + '; display:flex; align-items:center; justify-content:center; padding:16px;';
+  const caixa = document.createElement('div');
+  caixa.style.cssText = 'background:#ffffff; border-radius:14px; padding:20px; max-width:340px; width:100%; box-shadow:0 10px 30px rgba(0,0,0,0.3); text-align:center;';
+  ov.appendChild(caixa);
+  ov.addEventListener('click', function (e) { if (e.target === ov) ov.remove(); });
+  return { ov: ov, caixa: caixa };
+}
+function pdBotao(texto, fundo, cor, acao) {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.style.cssText = 'flex:1; padding:11px 14px; border-radius:10px; border:none; font-size:15px; font-weight:700; cursor:pointer; background:' + fundo + '; color:' + cor + ';';
+  b.textContent = texto; b.onclick = acao; return b;
+}
+function pedirSenhaDono(aoValidar) {
+  const c = pdCaixa('senhaDonoOverlay', 99998), ov = c.ov, caixa = c.caixa;
+  const titulo = document.createElement('div');
+  titulo.style.cssText = 'font-size:16px; font-weight:700; color:#0f172a; margin-bottom:12px;';
+  titulo.textContent = 'Área de controlo — introduza a senha';
+  const campo = document.createElement('input');
+  campo.type = 'password'; campo.autocomplete = 'off'; campo.placeholder = 'Senha';
+  campo.style.cssText = 'width:100%; box-sizing:border-box; padding:11px 12px; border:2px solid #cbd5e1; border-radius:10px; font-size:16px; text-align:center; color:#0f172a; background:#fff;';
+  const erro = document.createElement('div');
+  erro.style.cssText = 'color:#dc2626; font-size:14px; font-weight:700; margin-top:8px; min-height:18px;';
+  const botoes = document.createElement('div');
+  botoes.style.cssText = 'display:flex; gap:10px; margin-top:12px;';
+  function validar() {
+    if (campo.value === SENHA_DONO) { ov.remove(); aoValidar(); }
+    else { erro.textContent = 'Senha incorreta.'; campo.value = ''; campo.focus(); }
+  }
+  botoes.appendChild(pdBotao('Cancelar', '#e2e8f0', '#0f172a', function () { ov.remove(); }));
+  botoes.appendChild(pdBotao('Entrar', '#2563eb', '#ffffff', validar));
+  campo.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); validar(); }
+    else if (e.key === 'Escape') { e.stopPropagation(); ov.remove(); }
+  });
+  caixa.appendChild(titulo); caixa.appendChild(campo); caixa.appendChild(erro); caixa.appendChild(botoes);
+  document.body.appendChild(ov);
+  campo.focus();
+}
+function pdConfirmar(msg, aoConfirmar, rotulo) {
+  const c = pdCaixa('pdConfirmarOverlay', 99999), ov = c.ov, caixa = c.caixa;
+  const t = document.createElement('div');
+  t.style.cssText = 'font-size:15px; font-weight:600; color:#0f172a; line-height:1.4;';
+  t.textContent = msg;
+  const botoes = document.createElement('div');
+  botoes.style.cssText = 'display:flex; gap:10px; margin-top:16px;';
+  botoes.appendChild(pdBotao('Cancelar', '#e2e8f0', '#0f172a', function () { ov.remove(); }));
+  botoes.appendChild(pdBotao(rotulo || 'Confirmar', '#2563eb', '#ffffff', function () { ov.remove(); aoConfirmar(); }));
+  caixa.appendChild(t); caixa.appendChild(botoes);
+  document.body.appendChild(ov);
+}
+function abrirPainelDono() { pedirSenhaDono(function () { montarPainelDono(); }); }
+function fecharPainelDono() { const ov = document.getElementById('painelDonoOverlay'); if (ov) ov.remove(); }
+function dnEsc(s) {
+  return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; });
+}
+function dnBytes(n) {
+  if (!isFinite(n)) return '?';
+  if (n < 1024) return n + ' B';
+  if (n < 1048576) return (n / 1024).toFixed(1) + ' KB';
+  if (n < 1073741824) return (n / 1048576).toFixed(1) + ' MB';
+  return (n / 1073741824).toFixed(2) + ' GB';
+}
+function dnBrowser() {
+  const u = navigator.userAgent; let b = 'Desconhecido', m;
+  if ((m = u.match(/Edg\/(\d+)/))) b = 'Edge ' + m[1];
+  else if ((m = u.match(/OPR\/(\d+)/))) b = 'Opera ' + m[1];
+  else if ((m = u.match(/SamsungBrowser\/(\d+)/))) b = 'Samsung Internet ' + m[1];
+  else if ((m = u.match(/(?:Chrome|CriOS)\/(\d+)/))) b = 'Chrome ' + m[1];
+  else if ((m = u.match(/(?:Firefox|FxiOS)\/(\d+)/))) b = 'Firefox ' + m[1];
+  else if ((m = u.match(/Version\/(\d+).*Safari/))) b = 'Safari ' + m[1];
+  let so = '';
+  if (/Android/.test(u)) { m = u.match(/Android ([\d.]+)/); so = 'Android ' + (m ? m[1] : ''); }
+  else if (/iPhone|iPad|iPod/.test(u)) so = 'iOS';
+  else if (/Windows/.test(u)) so = 'Windows';
+  else if (/Mac OS X/.test(u)) so = 'macOS';
+  else if (/Linux/.test(u)) so = 'Linux';
+  return so ? b + ' · ' + so : b;
+}
+function dnDataAtualizacao() {
+  const d = new Date(dataAtualizacaoEfetiva() + 'T12:00:00');
+  return isNaN(d) ? dataAtualizacaoEfetiva() : d.toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+/* recolhe o diagnóstico (só lê; não altera nada) */
+async function dnColetar() {
+  const avisos = [];
+  let ls = null; try { ls = localStorage; } catch (e) {}
+  const standalone = (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+  const est = (window.calcEstado && window.calcEstado()) || {};
+
+  const app = [
+    ['Última atualização', dnDataAtualizacao()],
+    ['Aberta como', standalone ? 'App instalada' : 'Browser'],
+    ['Endereço', location.protocol === 'file:' ? 'ficheiro local' : location.host + location.pathname],
+    ['Tipo escolhido', est.tipo === 'compound' ? 'Juros compostos' : 'TANB'],
+    ['Retenção em uso', est.ret != null ? pctTxt(est.ret) + ' %' : '?'],
+    ['Retenção predefinida', pctTxt(RETENCAO_DEFEITO) + ' % (Continente) · ' + pctTxt(RETENCAO_ILHAS) + ' % (Ilhas)']
+  ];
+
+  const net = (navigator.connection && navigator.connection.effectiveType) ? ' (' + navigator.connection.effectiveType + ')' : '';
+  const disp = [
+    ['Ecrã', innerWidth + ' × ' + innerHeight + ' px · ×' + (window.devicePixelRatio || 1)],
+    ['Browser', dnBrowser()],
+    ['Idioma · fuso', navigator.language + ' · ' + (Intl.DateTimeFormat().resolvedOptions().timeZone || '?')],
+    ['Rede', (navigator.onLine ? 'online' : 'offline') + net]
+  ];
+  if (!navigator.onLine) avisos.push('Sem ligação à internet neste momento.');
+
+  let sw;
+  if (location.protocol === 'file:') sw = 'não aplicável (ficheiro local)';
+  else if (!('serviceWorker' in navigator)) sw = 'não suportado';
+  else {
+    try {
+      const r = await navigator.serviceWorker.getRegistrations();
+      sw = r.length ? 'ativo (' + r.length + ')' : 'nenhum registado';
+      if (!r.length) avisos.push('O service worker não está registado (confirme que o ficheiro sw.js está no servidor).');
+    } catch (e) { sw = 'erro ao ler'; }
+  }
+  let cch, cacheNomes = [];
+  if ('caches' in window) {
+    try { cacheNomes = await caches.keys(); cch = cacheNomes.length ? cacheNomes.join(', ') : 'nenhuma'; } catch (e) { cch = 'erro ao ler'; }
+  } else cch = 'não suportado';
+
+  const arm = [];
+  if (ls) {
+    const ks = Object.keys(ls); let tot = 0;
+    ks.forEach(function (k) { tot += k.length + (ls.getItem(k) || '').length; });
+    arm.push(['Dados locais', ks.length + ' chave(s) · ' + dnBytes(tot * 2)]);
+    ks.forEach(function (k) { const v = ls.getItem(k) || ''; arm.push(['· ' + k, v.length > 40 ? v.slice(0, 40) + '…' : v]); });
+  } else arm.push(['Dados locais', 'indisponíveis']);
+  if (navigator.storage && navigator.storage.estimate) {
+    try {
+      const e = await navigator.storage.estimate();
+      if (e.quota) {
+        arm.push(['Espaço usado', dnBytes(e.usage) + ' de ' + dnBytes(e.quota)]);
+        if (e.usage / e.quota > 0.8) avisos.push('O armazenamento do browser está quase cheio.');
+      }
+    } catch (x) {}
+  }
+  arm.push(['Service worker', sw]);
+  arm.push(['Cache da app', cch]);
+
+  const er = window.__erros || [];
+  const erros = er.length
+    ? er.slice(-8).map(function (x) { return [new Date(x.t).toLocaleTimeString('pt-PT'), (x.tipo === 'recurso' ? 'Não carregou: ' : x.tipo === 'promessa' ? 'Falha: ' : 'Erro: ') + x.msg]; })
+    : [['—', 'Nenhum erro desde que a página abriu']];
+  if (er.length) avisos.push(er.length + ' erro(s) desde que a página abriu (ver abaixo).');
+
+  return { avisos: avisos, grupos: [
+    { t: 'Aplicação', l: app }, { t: 'Dispositivo', l: disp },
+    { t: 'Armazenamento', l: arm }, { t: 'Erros desde que abriu', l: erros }
+  ] };
+}
+function dnTexto() {
+  let t = 'Calculadora de Juros (Mobile) — diagnóstico (' + new Date().toLocaleString('pt-PT') + ')\n';
+  if (!dnDados) return t;
+  t += '\nAvisos: ' + (dnDados.avisos.length ? '\n- ' + dnDados.avisos.join('\n- ') : 'nenhum') + '\n';
+  dnDados.grupos.forEach(function (g) {
+    t += '\n[' + g.t + ']\n' + g.l.map(function (r) { return r[0] + ': ' + r[1]; }).join('\n') + '\n';
+  });
+  return t;
+}
+async function dnCopiar(btn) {
+  const t = dnTexto(); let ok = false;
+  try { await navigator.clipboard.writeText(t); ok = true; }
+  catch (e) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = t; ta.style.cssText = 'position:fixed; opacity:0;';
+      document.body.appendChild(ta); ta.select(); ok = document.execCommand('copy'); ta.remove();
+    } catch (x) {}
+  }
+  const antes = btn.textContent;
+  btn.textContent = ok ? '✅ Copiado' : '❌ Não foi possível copiar';
+  setTimeout(function () { btn.textContent = antes; }, 1800);
+}
+function dnReporDefinicoes() {
+  pdConfirmar('Repor as definições? O estado da app instalada é esquecido (o botão «Instalar app» volta a aparecer).', function () {
+    try { ['calculadora-app-instalada'].forEach(function (k) { localStorage.removeItem(k); }); } catch (e) {}
+    location.reload();
+  }, 'Repor');
+}
+
+/* ===== Administrador: modo 1 = diagnóstico e ferramentas; modo 2 = data de atualização, retenção e guardar ===== */
+let dnModo = 1, dnDataEd = '', dnRetEd = '', dnRetIlEd = '', dnDataManual = false;
+function dnFeedback(btn, txt) {
+  const antes = btn.textContent;
+  btn.textContent = txt;
+  setTimeout(function () { btn.textContent = antes; }, 2000);
+}
+function dnParse(v) { return parseFloat(String(v).replace(/[%\s\u00a0\u202f]/g, '').replace(',', '.')) || 0; }
+function dnLerData(btn) {
+  const d = (document.getElementById('pdSiteData') || {}).value || dnDataEd;
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(d)) { dnFeedback(btn, '❌ Escolha uma data válida'); return null; }
+  return d;
+}
+function dnLerRet(btn, id, atual) {
+  const el = document.getElementById(id);
+  const txt = (el ? el.value : atual).trim();
+  const r = dnParse(txt);
+  if (!/\d/.test(txt) || !(r >= 0 && r <= 99.9)) { dnFeedback(btn, '❌ Retenção entre 0 e 99,9'); return null; }
+  return r;
+}
+function dnDataHoje() {
+  dnDataEd = dataParaIso(new Date());
+  const el = document.getElementById('pdSiteData');
+  if (el) el.value = dnDataEd;
+}
+function dnAplicarData(btn) {
+  const d = dnLerData(btn); if (!d) return;
+  const r = dnLerRet(btn, 'pdRetDef', dnRetEd); if (r === null) return;
+  const ri = dnLerRet(btn, 'pdRetIlhas', dnRetIlEd); if (ri === null) return;
+  if (dnDataManual) { ULTIMA_ATUALIZACAO = d; dataForcada = true; } else { ULTIMA_ATUALIZACAO = dataParaIso(new Date()); dataForcada = false; }
+  RETENCAO_DEFEITO = r;
+  RETENCAO_ILHAS = ri;
+  dnRetEd = pctTxt(r);
+  dnRetIlEd = pctTxt(ri);
+  if (window.calcAplicarRetencoes) window.calcAplicarRetencoes();
+  atualizarDataMenu();
+  dnFeedback(btn, '✅ Aplicado');
+  dnAtualizar();
+}
+async function dnDescarregarIndex(btn) {
+  const d = dnLerData(btn); if (!d) return;
+  const r = dnLerRet(btn, 'pdRetDef', dnRetEd); if (r === null) return;
+  const ri = dnLerRet(btn, 'pdRetIlhas', dnRetIlEd); if (ri === null) return;
+  try {
+    const resp = await fetch(location.href.split('#')[0], { cache: 'no-store' });
+    if (!resp.ok) throw 0;
+    let src = await resp.text();
+    let achou = 0;
+    const dEscrita = dnDataManual ? d : dataParaIso(new Date());
+    src = src.replace(/((?:const|let)\s+ULTIMA_ATUALIZACAO\s*=\s*')[^']*(')/, function (m, a, b) { achou++; return a + dEscrita + b; });
+    if (achou !== 1) throw 0;
+    let achouMan = 0;
+    src = src.replace(/(let\s+DATA_MANUAL\s*=\s*)(?:true|false)(;)/, function (m, a, b) { achouMan++; return a + (dnDataManual ? 'true' : 'false') + b; });
+    if (achouMan !== 1) throw 0;
+    let achouRet = 0;
+    src = src.replace(/(let\s+RETENCAO_DEFEITO\s*=\s*)[0-9.]+(;)/, function (m, a, b) { achouRet++; return a + String(r) + b; });
+    if (achouRet !== 1) throw 0;
+    let achouIl = 0;
+    src = src.replace(/(let\s+RETENCAO_ILHAS\s*=\s*)[0-9.]+(;)/, function (m, a, b) { achouIl++; return a + String(ri) + b; });
+    if (achouIl !== 1) throw 0;
+    const url = URL.createObjectURL(new Blob([src], { type: 'text/html;charset=utf-8' }));
+    const a = document.createElement('a');
+    a.href = url; a.download = 'index.html';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+    dnFeedback(btn, '✅ Descarregado');
+  } catch (e) {
+    dnFeedback(btn, '❌ Não foi possível (abra o site pelo endereço online)');
+  }
+}
+function dnIrModo(n) {
+  dnModo = n;
+  const ov = document.getElementById('painelDonoOverlay');
+  if (ov) ov.querySelectorAll('.pd-modo button').forEach(function (b, i) {
+    b.classList.toggle('on', i + 1 === n);
+    if (i + 1 === n) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+  });
+  const c = document.getElementById('pdCorpo');
+  if (c) { c.scrollTop = 0; dnRender(c); }
+}
+function dnRender(c) {
+  const pos = c.scrollTop;
+  let h = '';
+  if (dnModo === 2) {
+    h += '<div class="pd-sec">Data de atualização do site</div>' +
+      '<div class="pd-card" style="padding:4px 12px 12px;">' +
+      '<label class="pd-lbl" for="pdSiteData">Data mostrada no menu (☰)</label>' +
+      '<input id="pdSiteData" class="pd-input" type="date" value="' + dnEsc(dnDataEd) + '" oninput="dnDataEd = this.value; dnDataManual = true">' +
+      '</div>' +
+      '<button type="button" class="pd-btn" onclick="dnDataHoje(); dnDataManual = false">📅 Usar a data de hoje</button>' +
+      '<div class="pd-nota">A data é automática: vem da data do ficheiro no servidor. Só escreva uma data se quiser forçá-la.</div>';
+    h += '<div class="pd-sec">Taxa de retenção do Estado português</div>' +
+      '<div class="pd-card" style="padding:4px 12px 12px;">' +
+      '<label class="pd-lbl" for="pdRetDef">Portugal Continental (%)</label>' +
+      '<input id="pdRetDef" class="pd-input" type="text" inputmode="decimal" autocomplete="off" value="' + dnEsc(dnRetEd) + '" oninput="dnRetEd = this.value">' +
+      '<label class="pd-lbl" for="pdRetIlhas">Açores e Madeira (%)</label>' +
+      '<input id="pdRetIlhas" class="pd-input" type="text" inputmode="decimal" autocomplete="off" value="' + dnEsc(dnRetIlEd) + '" oninput="dnRetIlEd = this.value">' +
+      '</div>' +
+      '<div class="pd-nota">Taxas de retenção na fonte aplicadas pelo Estado português aos juros (entre 0 e 99,9). No menu «Retenção», o utilizador escolhe entre as duas; Portugal Continental vem predefinido. Atualize aqui se as taxas legais mudarem.</div>';
+    h += '<div class="pd-sec">Guardar alterações</div>' +
+      '<button type="button" class="pd-btn pd-azul" onclick="dnAplicarData(this)">✅ Aplicar neste ecrã</button>' +
+      '<div class="pd-nota">Mostra já a nova data e a nova retenção, só para ver. Não ficam guardadas no site.</div>' +
+      '<button type="button" class="pd-btn pd-azul" onclick="dnDescarregarIndex(this)">⬇️ Descarregar index.html corrigido</button>' +
+      '<div class="pd-nota">Descarrega o index.html com esta data e esta retenção já escritas. Depois é só substituir o ficheiro no servidor.</div>';
+    c.innerHTML = h;
+    c.scrollTop = pos;
+    return;
+  }
+  h += '<div class="pd-sec">Avisos</div>';
+  h += dnDados.avisos.length
+    ? dnDados.avisos.map(function (a) { return '<div class="pd-aviso">⚠️ ' + dnEsc(a) + '</div>'; }).join('')
+    : '<div class="pd-ok">✅ Sem avisos</div>';
+  dnDados.grupos.forEach(function (g) {
+    h += '<div class="pd-sec">' + dnEsc(g.t) + '</div><div class="pd-card">' +
+      g.l.map(function (r) { return '<div class="pd-row"><span>' + dnEsc(r[0]) + '</span><b>' + dnEsc(r[1]) + '</b></div>'; }).join('') + '</div>';
+  });
+  h += '<div class="pd-sec">Ferramentas</div>' +
+    '<button type="button" class="pd-btn pd-azul" onclick="dnCopiar(this)">📋 Copiar diagnóstico</button>' +
+    '<div class="pd-nota">Copia tudo isto como texto, para colar numa mensagem.</div>' +
+    '<button type="button" class="pd-btn" onclick="dnAtualizar()">🔃 Repetir diagnóstico</button>' +
+    '<a class="pd-btn pd-azul" style="text-decoration:none;" href="' + dnEsc(DIAGNOSTICO_PWA) + '" target="_blank" rel="noopener">🩺 Diagnóstico da app instalável</a>' +
+    '<div class="pd-nota">Verifica se o site pode ser instalado como app no telemóvel (manifesto, ícones e service worker). Abre ' + dnEsc(DIAGNOSTICO_PWA) + ' num novo separador.</div>';
+  h += '<div class="pd-sec">Reposição</div>' +
+    '<button type="button" class="pd-btn pd-amarelo" onclick="dnReporDefinicoes()">↩️ Repor definições</button>' +
+    '<div class="pd-nota">O estado da app instalada volta ao início.</div>';
+  c.innerHTML = h;
+  c.scrollTop = pos;
+}
+async function dnAtualizar() {
+  dnDados = await dnColetar();
+  const c = document.getElementById('pdCorpo');
+  if (c) dnRender(c);
+}
+function montarPainelDono() {
+  fecharPainelDono();
+  dnModo = 1; dnDataManual = false; dnDataEd = dataAtualizacaoEfetiva(); dnRetEd = pctTxt(RETENCAO_DEFEITO); dnRetIlEd = pctTxt(RETENCAO_ILHAS);
+  const ov = document.createElement('div');
+  ov.id = 'painelDonoOverlay';
+  ov.innerHTML = '<div role="dialog" aria-modal="true" aria-label="Área de controlo">' +
+    '<div class="pd-head"><span style="display:flex;align-items:center;"><strong>🛠️ Área de controlo</strong>' +
+    '<span class="pd-modo" role="group" aria-label="Modo do administrador">' +
+    '<button type="button" class="on" aria-current="true" title="1: diagnóstico e ferramentas" aria-label="Administrador 1" onclick="dnIrModo(1)">1</button>' +
+    '<button type="button" title="2: data de atualização, retenção e guardar alterações" aria-label="Administrador 2" onclick="dnIrModo(2)">2</button>' +
+    '</span></span><span class="pd-x" onclick="fecharPainelDono()" aria-label="Fechar">×</span></div>' +
+    '<div class="pd-body" id="pdCorpo">A recolher diagnóstico…</div></div>';
+  ov.addEventListener('click', function (e) { if (e.target === ov) fecharPainelDono(); });
+  document.body.appendChild(ov);
+  dnAtualizar();
+}
+
+atualizarDataMenu();
+obterDataAutomatica();
+</script>
+<script>
 (function () {
     'use strict';
     var MAX_DIAS = 36500, MAX_TAXA = 100, MAX_MONTANTE = 1e12;
-    var RET_CONT = 28, RET_ILHAS = 19.6;
     var PERIODOS = { diaria: 365, mensal: 12, anual: 1 };
     var CHAVE = 'simulador_mobile_v1';
 
-    var st = { tipo: 'tanb', ret: RET_CONT, base: 360, cap: 'diaria', preset: null, outra: false, reg: RET_CONT };
+    var st = { tipo: 'tanb', ret: RETENCAO_DEFEITO, base: 360, cap: 'diaria', preset: null, outra: false, reg: 'cont' };
     var PRAZOS = [30, 90, 180, 365];
     var erroDatas = '', modoDatas = false;
-    var DATA_ATUALIZACAO = '2026-11-22'; /* AAAA-MM-DD: mudar sempre que a página for atualizada */
     var URL_INICIO = 'https://gard3npt.github.io/'; /* ligação do ecrã de despedida, quando o navegador não deixa fechar a janela */
     var $ = function (id) { return document.getElementById(id); };
 
@@ -503,15 +933,17 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
         document.body.setAttribute('data-tipo', st.tipo);
         $('b-tanb').setAttribute('aria-checked', st.tipo === 'tanb');
         $('b-comp').setAttribute('aria-checked', st.tipo === 'compound');
-        $('r-cont').setAttribute('aria-pressed', !st.outra && st.ret === RET_CONT);
-        $('r-ilhas').setAttribute('aria-pressed', !st.outra && st.ret === RET_ILHAS);
+        $('r-cont').setAttribute('aria-pressed', !st.outra && st.reg === 'cont');
+        $('r-ilhas').setAttribute('aria-pressed', !st.outra && st.reg === 'ilhas');
         $('r-outra').setAttribute('aria-pressed', st.outra);
         if (!st.outra && document.activeElement !== $('ret')) { $('ret').value = ''; $('ret').classList.remove('erro'); }
         document.querySelectorAll('[data-dias]').forEach(function (b) { b.setAttribute('aria-checked', Number(b.dataset.dias) === st.preset); });
         document.querySelectorAll('[data-base]').forEach(function (b) { b.setAttribute('aria-pressed', Number(b.dataset.base) === st.base); });
         document.querySelectorAll('[data-cap]').forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.cap === st.cap); });
         $('p-ret').textContent = pctTxt(st.ret) + ' %';
-        $('v-ret').textContent = st.outra ? 'Outra' : st.ret === RET_CONT ? 'Continente' : 'Ilhas';
+        $('r-cont').querySelector('.dir').textContent = pctTxt(RETENCAO_DEFEITO) + ' %';
+        $('r-ilhas').querySelector('.dir').textContent = pctTxt(RETENCAO_ILHAS) + ' %';
+        $('v-ret').textContent = st.outra ? 'Outra' : st.reg === 'ilhas' ? 'Ilhas' : 'Continente';
         $('v-base').textContent = st.base + ' dias';
         $('v-cap').textContent = { diaria: 'Diária', mensal: 'Mensal', anual: 'Anual' }[st.cap];
         var tc = document.querySelector('meta[name="theme-color"]');
@@ -537,8 +969,8 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
 
     $('b-tanb').addEventListener('click', function () { st.tipo = 'tanb'; sincronizar(); atualizar(); });
     $('b-comp').addEventListener('click', function () { st.tipo = 'compound'; sincronizar(); atualizar(); });
-    $('r-cont').addEventListener('click', function () { st.ret = st.reg = RET_CONT; st.outra = false; sincronizar(); atualizar(); });
-    $('r-ilhas').addEventListener('click', function () { st.ret = st.reg = RET_ILHAS; st.outra = false; sincronizar(); atualizar(); });
+    $('r-cont').addEventListener('click', function () { st.reg = 'cont'; st.ret = RETENCAO_DEFEITO; st.outra = false; sincronizar(); atualizar(); });
+    $('r-ilhas').addEventListener('click', function () { st.reg = 'ilhas'; st.ret = RETENCAO_ILHAS; st.outra = false; sincronizar(); atualizar(); });
     /* «Outra»: o campo começa vazio e só fica selecionada quando é escrito um valor (só números) */
     $('ret').addEventListener('focus', function (e) {
         var el = e.target;
@@ -549,7 +981,7 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
         el.value = el.value.replace(/[^\d.,]/g, '');
         txt = el.value.trim();
         if (txt === '') {
-            st.outra = false; st.ret = st.reg; el.classList.remove('erro');
+            st.outra = false; st.ret = (st.reg === 'ilhas' ? RETENCAO_ILHAS : RETENCAO_DEFEITO); el.classList.remove('erro');
         } else {
             var r = parsePt(txt, true);
             if (/\d/.test(txt) && r >= 0 && r <= 99.9) { st.outra = true; st.ret = r; el.classList.remove('erro'); }
@@ -660,32 +1092,53 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
     });
     $('montante').addEventListener('focus', function () { atualizar(); });
     $('montante').addEventListener('blur', function () { atualizar(); });
-    /* Data de atualização e botão «Instalar app» (só aparece enquanto a app não está instalada) */
-    (function () {
-        var p = DATA_ATUALIZACAO.split('-'), d = new Date(+p[0], +p[1] - 1, +p[2]);
-        $('data-atual').textContent = isNaN(d) ? DATA_ATUALIZACAO : d.toLocaleDateString('pt-PT', { day: 'numeric', month: 'long', year: 'numeric' });
-    })();
-    var pedidoInstalar = null;
+    /* «Instalar app»: aparece sempre que a app não está instalada. Com o pedido do navegador instala;
+       sem ele, explica como instalar. Fica oculto quando a app já está instalada. */
+    var pedidoInstalar = null, recusou = false, inicioPagina = Date.now();
+    var CHAVE_INST = 'calculadora-app-instalada';
     var ehIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
-    function jaInstalada() {
-        return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true;
+    var dentroDeApp = /FBAN|FBAV|Instagram|Line\/|MicroMessenger|Snapchat|TikTok|; wv\)/.test(navigator.userAgent);
+    function emApp() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; }
+    function lembrar(v) { try { if (v) localStorage.setItem(CHAVE_INST, '1'); else localStorage.removeItem(CHAVE_INST); } catch (e) { /* ignora */ } }
+    function lembrada() { try { return localStorage.getItem(CHAVE_INST) === '1'; } catch (e) { return false; } }
+    function provavel() {   /* o navegador suporta instalar mas não ofereceu: provavelmente já está instalada */
+        if (!('BeforeInstallPromptEvent' in window) || dentroDeApp) return false;
+        return !pedidoInstalar && !recusou && (Date.now() - inicioPagina > 4000);
+    }
+    function jaInstalada() { return emApp() || (!pedidoInstalar && (lembrada() || provavel())); }
+    function textoAjuda() {
+        if (dentroDeApp) return 'Abra esta página diretamente no Chrome ou no Safari (menu ⋮ → «Abrir no navegador») para poder instalar.';
+        if (ehIOS) return 'No iPhone: toque em Partilhar e depois em «Adicionar ao ecrã principal».';
+        return 'Abra o menu do navegador (⋮) e escolha «Instalar aplicação» ou «Adicionar ao ecrã principal».';
     }
     function atualizarInstalar() {
-        $('m-instalar').hidden = jaInstalada() || !(pedidoInstalar || ehIOS);
+        $('m-instalar').hidden = jaInstalada();
         if ($('m-instalar').hidden) $('m-ajuda').hidden = true;
     }
-    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); pedidoInstalar = e; atualizarInstalar(); });
-    window.addEventListener('appinstalled', function () { pedidoInstalar = null; atualizarInstalar(); });
+    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); pedidoInstalar = e; lembrar(false); atualizarInstalar(); });
+    window.addEventListener('appinstalled', function () { pedidoInstalar = null; lembrar(true); atualizarInstalar(); });
     $('m-instalar').addEventListener('click', function () {
         if (pedidoInstalar) {
             var p = pedidoInstalar;
             p.prompt();
-            p.userChoice.then(function () { pedidoInstalar = null; atualizarInstalar(); fecharMenuApp(); });
-        } else if (ehIOS) {
-            $('m-ajuda').hidden = !$('m-ajuda').hidden;   /* no iPhone não há botão automático: mostra os passos */
+            p.userChoice.then(function (r) {
+                if (r && r.outcome === 'accepted') lembrar(true); else recusou = true;
+                pedidoInstalar = null; atualizarInstalar(); fecharMenuApp();
+            });
+        } else {
+            $('m-ajuda').textContent = textoAjuda();
+            $('m-ajuda').hidden = !$('m-ajuda').hidden;
         }
     });
     atualizarInstalar();
+
+    /* Ganchos usados pela Área de controlo (script global) */
+    window.fecharMenuApp = fecharMenuApp;
+    window.calcEstado = function () { return st; };
+    window.calcAplicarRetencoes = function () {
+        if (!st.outra) st.ret = (st.reg === 'ilhas' ? RETENCAO_ILHAS : RETENCAO_DEFEITO);
+        sincronizar(); atualizar();
+    };
 
     /* Menu de três linhas */
     function fecharMenuApp() {
@@ -695,6 +1148,7 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
     $('burger').addEventListener('click', function (e) {
         e.stopPropagation();
         var abrir = $('appmenu-lista').hidden;
+        if (abrir) atualizarInstalar();
         fecharMenus();
         if (abrir) { $('appmenu-lista').hidden = false; this.setAttribute('aria-expanded', 'true'); }
         else fecharMenuApp();
@@ -704,7 +1158,7 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
     $('m-partilhar').addEventListener('click', function () {
         var dados = { title: 'Calculadora de Juros (Mobile)', text: 'Calculadora de juros para telemóvel: TANB e juros compostos.', url: location.origin + location.pathname };
         var t = $('m-partilhar-t');
-        function aviso(txt) { t.textContent = txt; setTimeout(function () { t.textContent = 'Partilhar o site'; }, 2200); }
+        function aviso(txt) { t.textContent = txt; setTimeout(function () { t.textContent = 'Partilhar'; }, 2200); }
         if (navigator.share) {
             navigator.share(dados).then(fecharMenuApp, function () { /* cancelado: não faz nada */ });
         } else if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -713,13 +1167,21 @@ button:focus-visible { outline: 3px solid #2563eb; outline-offset: 2px; }
             window.prompt('Copie o endereço:', dados.url);
         }
     });
-    $('m-atualizar').addEventListener('click', function () {
-        fecharMenuApp();
-        var recarregar = function () { location.reload(); };
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.getRegistration().then(function (r) { return r ? r.update() : null; }).then(recarregar, recarregar);
-        } else { recarregar(); }
-    });
+    async function atualizarApp() {
+    /* Atualizar (igual em todos os sites): pede à rede a versão mais recente e limpa o service worker e as caches.
+       A sessão e as definições mantêm-se. Se não houver ligação, não apaga nada. */
+    try {
+        const r = await fetch(location.href.split('#')[0], { cache: 'reload' });
+        if (!r.ok) throw new Error('http ' + r.status);
+    } catch (e) {
+        window.alert('Sem ligação à internet: não foi possível atualizar. Tente de novo quando estiver ligado.');
+        return;
+    }
+    try { if ('serviceWorker' in navigator) { const rs = await navigator.serviceWorker.getRegistrations(); await Promise.all(rs.map(function (x) { return x.unregister(); })); } } catch (e) {}
+    try { if ('caches' in window) { const ks = await caches.keys(); await Promise.all(ks.filter(function (k) { return !/^caricas-fotos/.test(k); }).map(function (k) { return caches.delete(k); })); } } catch (e) {}
+    location.reload();
+}
+    $('m-atualizar').addEventListener('click', function () { fecharMenuApp(); atualizarApp(); });
     /* Logout: tenta fechar a janela/app. Se o navegador não deixar, mostra o ecrã de despedida */
     $('saida-home').href = URL_INICIO;
     $('m-sair').addEventListener('click', function () {
